@@ -8,7 +8,7 @@ namespace Dominio
 
 		public String nombre{ get; set; }
 
-		public String apellido{ get; set; }
+		public String apellido{ get; set; }// nuevo cambio
 
         public DateTime fechaNacimiento { get; set; } //hola algo nuevo
 
