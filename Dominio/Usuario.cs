@@ -12,7 +12,7 @@ namespace Dominio
 
         public DateTime fechaNacimiento { get; set; } //hola algo nuevo
 
-		public string contraseña{ get; set; }
+		public string contraseña{ get; set; } //cambio rodrigo
 
 	}
 
