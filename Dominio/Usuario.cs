@@ -10,7 +10,7 @@ namespace Dominio
 
 		public String apellido{ get; set; }
 
-		public DateTime fechaNacimiento{ get; set; }
+        public DateTime fechaNacimiento { get; set; } //hola algo nuevo
 
 		public string contraseña{ get; set; }
 
