@@ -11,7 +11,7 @@ namespace Dominio
 
 		public decimal monto{ get; set; }
 
-		public int coutas{ get; set; }
+		public int cuotas{ get; set; }
 
 		public string rutaImagen{ get; set; }
 
