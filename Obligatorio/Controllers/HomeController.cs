@@ -13,16 +13,16 @@ namespace Obligatorio.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Registrarse()
         {
-            ViewBag.Message = "Your application description page.";
+            //ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Home()
         {
-            ViewBag.Message = "Your contact page.";
+            //ViewBag.Message = "Your contact page.";
 
             return View();
         }
