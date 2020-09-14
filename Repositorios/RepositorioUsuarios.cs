@@ -7,42 +7,31 @@ using System.Threading.Tasks;
 
 namespace Repositorios
 {
-    public class RepositorioUsuarios
+    public class RepositorioUsuarios : IRepositorio<Usuario>
     {
-        public bool Add(Usuario unUsuario)
+        public bool Add(Usuario unT)
         {
-            //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
-            return true;
-        }
-        public bool Remove(Usuario unUsuario)
-        {
-            return true;
-        }
-        public bool Remove(int Id)
-        {
-            return true;
-        }
-        public bool Update(Usuario unUsuario)
-        {
-            //No se modifica la clave primaria, o identificador
-            return true;
+            throw new NotImplementedException();
         }
 
-        public Usuario FindById(int id)
+        public IEnumerable<Usuario> FindAll()
         {
-            //retorna la categoría con ese id
-            return null;
-        }
-        public List<Usuario> FindAll()
-        {
-            return null;
-        }
-        public List<Usuario> FindXPalabraEnNombre(string nom)
-        {
-            //hay que hacer la búsqueda por nombre en las categorías.
-            throw new NotImplementedException("Ups, te falta implementar este método");
-            //return null;
+            throw new NotImplementedException();
         }
 
+        public Usuario FindById(object clave)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(Usuario unT)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Usuario unT)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

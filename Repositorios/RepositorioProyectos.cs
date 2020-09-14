@@ -7,41 +7,31 @@ using Dominio;
 
 namespace Repositorios
 {
-    class RepositorioProyectos
+    class RepositorioProyectos : IRepositorio<Proyecto>
     {
-        public bool Add(Proyecto unProyecto)
+        public bool Add(Proyecto unT)
         {
-            //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
-            return true;
-        }
-        public bool Remove(Proyecto unProyecto)
-        {
-            return true;
-        }
-        public bool Remove(int Id)
-        {
-            return true;
-        }
-        public bool Update(Proyecto unProyecto)
-        {
-            //No se modifica la clave primaria, o identificador
-            return true;
+            throw new NotImplementedException();
         }
 
-        public Proyecto FindById(int id)
+        public IEnumerable<Proyecto> FindAll()
         {
-            //retorna la categoría con ese id
-            return null;
+            throw new NotImplementedException();
         }
-        public List<Proyecto> FindAll()
+
+        public Proyecto FindById(object clave)
         {
-            return null;
+            throw new NotImplementedException();
         }
-        public List<Proyecto> FindXPalabraEnNombre(string nom)
+
+        public bool Remove(Proyecto unT)
         {
-            //hay que hacer la búsqueda por nombre en las categorías.
-            throw new NotImplementedException("Ups, te falta implementar este método");
-            //return null;
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Proyecto unT)
+        {
+            throw new NotImplementedException();
         }
     }
 }
