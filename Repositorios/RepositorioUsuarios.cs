@@ -102,8 +102,10 @@ namespace Repositorios
 
 
             SqlConnection cn = new Conexion().CrearConexion();
-            SqlCommand cmdCli = new SqlCommand("SELECT * FROM Usuarios WHERE Cedula=@cedula;", cn);
-            cmdCli.Parameters.AddWithValue("@cedula", c);
+            SqlCommand cmdCli = new SqlCommand(@"SELECT U.Cedula,U.Nombre,U.Apellido,U.FechaNacimiento,U.Password,U.Tipo,S.Celular,S.Email
+           FROM Usuarios U
+           LEFT JOIN Solicitantes S ON S.Cedula = U.Cedula", cn);
+            //cmdCli.Parameters.AddWithValue("@cedula", c);
             try
             {
                Usuario usu = new Usuario();
@@ -113,7 +115,30 @@ namespace Repositorios
                     SqlDataReader dr = cmdCli.ExecuteReader();
                     if (dr.Read())
                     {
-                        usu = CargarClienteDesdeFila(dr);
+                        if (dr["Tipo"].ToString() == "ADMIN")
+                        {
+                            Admin adm = new Admin();
+                            adm.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
+                            adm.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
+                            adm.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
+                            adm.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                            adm.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+                            return adm;
+
+                        }
+                        else if (dr["Tipo"].ToString() == "SOLICITANTE")
+                        {
+
+                            Solicitante sol = new Solicitante();
+                            sol.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
+                            sol.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
+                            sol.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
+                            sol.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                            sol.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+                            sol.celular= dr["Celular"] != DBNull.Value ? dr["Celular"].ToString() : "No tenés Password!";
+                            sol.email = dr["Email"] != DBNull.Value ? dr["Email"].ToString() : "No tenés Password!";
+                            return sol;
+                        }
                     }
                     if (dr.NextResult())
                     {
@@ -160,6 +185,7 @@ namespace Repositorios
             usu.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
             usu.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
             usu.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+            
             return usu;
         }
 

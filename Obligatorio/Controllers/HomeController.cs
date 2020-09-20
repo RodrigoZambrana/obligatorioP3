@@ -25,19 +25,19 @@ namespace Obligatorio.Controllers
             if (u != null && u.password.Equals(password))
             {
 
-               // Session["usuario"] = u.cedula;
+                // Session["usuario"] = u.cedula;
                 //Session["role"] = u.GetType();
-                return RedirectToAction("Index", "Solicitante");
+                //return RedirectToAction("Index", "Solicitante");
 
                 //esto habilitarlo cuando se defina la manera de identificar por tipo en el repositorio
-                //if (u is Admin)
-                //{
-                //    return RedirectToAction("Index", "Admin",u);
-                //}
-                //if (u is Solicitante)
-                //{
-                //    return RedirectToAction("Index", "Solicitante",u);
-                //}
+                if (u is Admin)
+                {
+                    return RedirectToAction("Index", "Admin", u);
+                }
+                if (u is Solicitante)
+                {
+                    return RedirectToAction("Index", "Solicitante", u);
+                }
 
             }
             else
