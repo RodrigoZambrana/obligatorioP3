@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -88,15 +89,6 @@ namespace Repositorios
             {
                 unaCon.CerrarConexion(cn);
             }
-
-
-
-
-
-
-
-
-
         }
 
         public IEnumerable<Usuario> FindAll()
@@ -104,10 +96,76 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        public Usuario FindById(object clave)
+        public Usuario FindById(object cedula)
         {
-            throw new NotImplementedException();
+            string c = cedula.ToString();
+
+
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmdCli = new SqlCommand("SELECT * FROM Usuarios WHERE Cedula=@cedula;", cn);
+            cmdCli.Parameters.AddWithValue("@cedula", c);
+            try
+            {
+               Usuario usu = new Usuario();
+
+                if (new Conexion().AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmdCli.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        usu = CargarClienteDesdeFila(dr);
+                    }
+                    if (dr.NextResult())
+                    {
+                        //while (dr.Read())
+                        //{
+                        //    usu.AgregarTelefono(
+                        //        new Telefono
+                        //        {
+                        //            CodigoArea = (int)dr["CodArea"],
+                        //            EsCelular = (bool)dr["EsCelular"],
+                        //            Numero = (int)dr["Numero"]
+                        //        }
+                        //        );
+
+                        //}
+                    }
+                }
+                return usu;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                new Conexion().CerrarConexion(cn);
+            }
         }
+
+
+        private Usuario CargarClienteDesdeFila(IDataRecord dr)
+        {
+
+            /*int numColumnaApellido = dr.GetOrdinal("Apellido");
+			string apellido = dr.GetString(numColumnaApellido);*/
+
+            Usuario usu = new Usuario();
+            usu.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
+            usu.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
+            usu.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
+            usu.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+            usu.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+            return usu;
+        }
+
+
+
+
 
         public bool Remove(Usuario unT)
         {

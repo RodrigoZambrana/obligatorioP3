@@ -16,6 +16,44 @@ namespace Obligatorio.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public ActionResult Index(string cedula, string password)
+        {
+            RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+            Usuario u = repoUsuarios.FindById(cedula);
+            if (u != null && u.password.Equals(password))
+            {
+
+               // Session["usuario"] = u.cedula;
+                //Session["role"] = u.GetType();
+                return RedirectToAction("Index", "Solicitante");
+
+                //esto habilitarlo cuando se defina la manera de identificar por tipo en el repositorio
+                //if (u is Admin)
+                //{
+                //    return RedirectToAction("Index", "Admin",u);
+                //}
+                //if (u is Solicitante)
+                //{
+                //    return RedirectToAction("Index", "Solicitante",u);
+                //}
+
+            }
+            else
+            {
+                ViewBag.mensaje = "Login erroneo";
+            }
+
+            return View();
+        }
+
+
+
+
+
+
+
         // GET: Home/Details/5
         public ActionResult Details(int id)
         {
@@ -28,6 +66,7 @@ namespace Obligatorio.Controllers
             return View();
         }
 
+
         // POST: Home/Create
         [HttpPost]
         public ActionResult Create(Solicitante solicitante)
@@ -39,7 +78,7 @@ namespace Obligatorio.Controllers
                 if (agregado)
                 {
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Solicitante", solicitante);
                 }
                 else {
                     return RedirectToAction("Create");
