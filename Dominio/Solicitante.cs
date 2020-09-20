@@ -9,10 +9,6 @@ namespace Dominio
 
 		public string email{ get; set; }
 
-		public string contrasena{ get; set; }
-
-		private ICollection<Proyecto> listaProyectos;
-
 	}
 
 }

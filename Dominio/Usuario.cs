@@ -14,7 +14,12 @@ namespace Dominio
 
 		public string password{ get; set; } //cambio rodrigo
 
-	}
+
+        public bool Validar()
+        {
+            return true;
+        }
+    }
 
 }
 
