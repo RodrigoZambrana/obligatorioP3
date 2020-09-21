@@ -10,7 +10,21 @@ namespace Obligatorio.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["usuario"] == null || (String)Session["rol"] != "ADMIN")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
             return View ();
         }
+
     }
+
+
 }

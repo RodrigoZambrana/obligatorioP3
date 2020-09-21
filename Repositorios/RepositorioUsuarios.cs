@@ -102,10 +102,13 @@ namespace Repositorios
 
 
             SqlConnection cn = new Conexion().CrearConexion();
-            SqlCommand cmdCli = new SqlCommand(@"SELECT U.Cedula,U.Nombre,U.Apellido,U.FechaNacimiento,U.Password,U.Tipo,S.Celular,S.Email
+            SqlCommand cmdCli = new SqlCommand(@"SELECT U.Cedula,U.Nombre,U.Apellido,U.FechaNacimiento,U.Password,U.Tipo,S.Celular,S.Email,A.Cedula
            FROM Usuarios U
-           LEFT JOIN Solicitantes S ON S.Cedula = U.Cedula", cn);
-            //cmdCli.Parameters.AddWithValue("@cedula", c);
+           LEFT JOIN Admin A ON U.Cedula = A.Cedula
+           LEFT JOIN Solicitantes S ON U.Cedula = S.Cedula
+            WHERE U.Cedula=@cedula;", cn);
+
+            cmdCli.Parameters.AddWithValue("@cedula", c);
             try
             {
                Usuario usu = new Usuario();
@@ -119,10 +122,11 @@ namespace Repositorios
                         {
                             Admin adm = new Admin();
                             adm.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
-                            adm.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
                             adm.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
-                            adm.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                            adm.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
                             adm.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+                            adm.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                           
                             return adm;
 
                         }
@@ -131,10 +135,10 @@ namespace Repositorios
 
                             Solicitante sol = new Solicitante();
                             sol.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
-                            sol.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
                             sol.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
-                            sol.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                            sol.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
                             sol.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+                            sol.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";                           
                             sol.celular= dr["Celular"] != DBNull.Value ? dr["Celular"].ToString() : "No tenés Password!";
                             sol.email = dr["Email"] != DBNull.Value ? dr["Email"].ToString() : "No tenés Password!";
                             return sol;
