@@ -29,7 +29,12 @@ namespace Dominio
 
 		private Solicitante solicitante;
 
-	}
+        public bool Validar()
+        {
+            return true;
+        }
+
+    }
 
 }
 

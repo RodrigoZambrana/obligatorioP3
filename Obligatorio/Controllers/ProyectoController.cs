@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Dominio;
+using Repositorios;
 
 namespace Obligatorio.Controllers
 {
@@ -28,7 +30,7 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Cooperativo(FormCollection collection)
+        public ActionResult Cooperativo(Proyecto proye)
         {
             try
             {
@@ -50,13 +52,21 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Personal(FormCollection collection)
+        public ActionResult Personal(Proyecto proyecto)
         {
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
             try
             {
-                // TODO: Add insert logic here
+                bool agregado = repoProyectos.Add(proyecto);
+                if (agregado)
+                {
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Solicitante", proyecto);
+                }
+                else
+                {
+                    return RedirectToAction("Create");
+                }
             }
             catch
             {
