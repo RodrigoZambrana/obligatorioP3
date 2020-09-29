@@ -22,7 +22,7 @@ namespace Repositorios
 
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Cedula,@Nombre,@Apellido,@FechaNacimento,@Password,@Tipo);", cn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Titulo,@Descripcion,@Monto,@Cuotas,@rutaImagen,@Estado,@fechaPresentacion,@Puntaje);", cn);
             cmd.Parameters.Add(new SqlParameter("@Titulo", unProyecto.titulo));
             cmd.Parameters.Add(new SqlParameter("@Descripcion", unProyecto.descripcion));
             cmd.Parameters.Add(new SqlParameter("@Monto", unProyecto.monto));
@@ -31,7 +31,7 @@ namespace Repositorios
             cmd.Parameters.Add(new SqlParameter("@Estado", unProyecto.estado));
             cmd.Parameters.Add(new SqlParameter("@fechaPresentacion", unProyecto.fechaPresentacion));
             cmd.Parameters.Add(new SqlParameter("@Puntaje", unProyecto.puntaje));
-            cmd.Parameters.Add(new SqlParameter("@Id", unProyecto.id));
+            
             SqlCommand cmd2 = new SqlCommand();
             cmd2.Connection = cn;
             SqlTransaction trn = null;
@@ -113,7 +113,6 @@ namespace Repositorios
         {
             throw new NotImplementedException();
         }
-    }
 
         public IEnumerable<Proyecto> FindAll()
         {
@@ -135,4 +134,7 @@ namespace Repositorios
             throw new NotImplementedException();
         }
     }
-}
+
+       
+    }
+

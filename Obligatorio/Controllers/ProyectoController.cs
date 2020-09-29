@@ -54,24 +54,28 @@ namespace Obligatorio.Controllers
         [HttpPost]
         public ActionResult Personal(Proyecto proyecto)
         {
-            RepositorioProyectos repoProyectos = new RepositorioProyectos();
-            try
-            {
-                bool agregado = repoProyectos.Add(proyecto);
-                if (agregado)
-                {
 
-                    return RedirectToAction("Index", "Solicitante", proyecto);
-                }
-                else
-                {
-                    return RedirectToAction("Create");
-                }
-            }
-            catch
-            {
-                return View();
-            }
+            List<Proyecto> proyectos = new List<Proyecto>();
+            proyectos.Add(proyecto);
+            //RepositorioProyectos repoProyectos = new RepositorioProyectos();
+            //try
+            //{
+            //    bool agregado = repoProyectos.Add(proyecto);
+            //    if (agregado)
+            //    {
+
+            //        return RedirectToAction("Index", "Solicitante");
+            //    }
+            //    else
+            //    {
+            //        return RedirectToAction("Create");
+            //    }
+            //}
+            //catch
+            //{
+            return RedirectToAction("Index", "Proyecto");
+
+            //}
         }
 
         // GET: Proyecto/Edit/5

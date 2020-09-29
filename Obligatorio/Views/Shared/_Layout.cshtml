@@ -32,7 +32,25 @@
 
                         {
                             <li>@Html.ActionLink("Home", "Index", "Solicitante")</li>
-                            <li>@Html.ActionLink("Presentar Proyecto", "PresentarProyecto", "Solicitante")</li>
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Presentar Proyecto
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+                                    <a class="dropdown-item" href="Proyecto/Cooperativo">Cooperativo</a>
+                                    <a class="dropdown-item" href="Proyecto/Personal">Personal</a>
+                                    
+                                </div>
+                            </li>
+
+
+
+
+                           
+
 
                         }
                         <li>@Html.ActionLink("Salir", "Salir", "Home")</li>
