@@ -30,21 +30,30 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Cooperativo(Proyecto proye)
+        public ActionResult Cooperativo(Cooperativo pCooperativo)
         {
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
             try
             {
-                // TODO: Add insert logic here
+                bool agregado = repoProyectos.Add(pCooperativo);
+                if (agregado)
+                {
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index", "Solicitante");
+                }
+                else
+                {
+                    return RedirectToAction("Cooperativo");
+                }
             }
             catch
             {
-                return View();
+                return RedirectToAction("Index", "Proyecto");
+
             }
         }
 
-        // GET: Proyecto/Cooperativo
+        // GET: Proyecto/Personal
         public ActionResult Personal()
         {
             return View();
@@ -52,30 +61,28 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Personal(Proyecto proyecto)
+        public ActionResult Personal(Personal pPersonal)
         {
 
-            List<Proyecto> proyectos = new List<Proyecto>();
-            proyectos.Add(proyecto);
-            //RepositorioProyectos repoProyectos = new RepositorioProyectos();
-            //try
-            //{
-            //    bool agregado = repoProyectos.Add(proyecto);
-            //    if (agregado)
-            //    {
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
+            try
+            {
+                bool agregado = repoProyectos.Add(pPersonal);
+                if (agregado)
+                {
 
-            //        return RedirectToAction("Index", "Solicitante");
-            //    }
-            //    else
-            //    {
-            //        return RedirectToAction("Create");
-            //    }
-            //}
-            //catch
-            //{
-            return RedirectToAction("Index", "Proyecto");
+                    return RedirectToAction("Index", "Solicitante");
+                }
+                else
+                {
+                    return RedirectToAction("Create");
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Proyecto");
 
-            //}
+            }
         }
 
         // GET: Proyecto/Edit/5

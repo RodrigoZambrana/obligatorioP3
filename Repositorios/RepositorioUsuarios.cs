@@ -44,16 +44,11 @@ namespace Repositorios
                     //Asignarle la transacción a cada uno de los comandos
                     //que querés que sean transaccionales:
                        cmd.Transaction = trn;
-                    //
-                    //
+
                     //int idAsignado = (int)cmd.ExecuteScalar();
                     if (unUsuario is Admin)
                     {
-                        //Admin adm = (Admin)unUsuario;
-                        //cmd2.CommandText = "INSERT INTO ProductoImportado VALUES (@Codigo,@Pais,@ImpuestoImportacion)";
-                        //cmd2.Parameters.Add(new SqlParameter("@Codigo", -88));
-                        //cmd2.Parameters.Add(new SqlParameter("@Pais", adm.Pais));
-                        //cmd2.Parameters.Add(new SqlParameter("@ImpuestoImportacion", ProductoImportado.ImpuestoImportacion));
+                        
 
                     }
                     else if (unUsuario is Solicitante)

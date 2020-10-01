@@ -22,16 +22,18 @@ namespace Repositorios
 
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Titulo,@Descripcion,@Monto,@Cuotas,@rutaImagen,@Estado,@fechaPresentacion,@Puntaje);", cn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);SELECT CAST(SCOPE_IDENTITY() AS INT)", cn);
             cmd.Parameters.Add(new SqlParameter("@Titulo", unProyecto.titulo));
             cmd.Parameters.Add(new SqlParameter("@Descripcion", unProyecto.descripcion));
             cmd.Parameters.Add(new SqlParameter("@Monto", unProyecto.monto));
             cmd.Parameters.Add(new SqlParameter("@Cuotas", unProyecto.cuotas));
-            cmd.Parameters.Add(new SqlParameter("@rutaImagen", unProyecto.rutaImagen));
+            cmd.Parameters.Add(new SqlParameter("@NombreImagen", unProyecto.rutaImagen));
             cmd.Parameters.Add(new SqlParameter("@Estado", unProyecto.estado));
             cmd.Parameters.Add(new SqlParameter("@fechaPresentacion", unProyecto.fechaPresentacion));
             cmd.Parameters.Add(new SqlParameter("@Puntaje", unProyecto.puntaje));
-            
+            cmd.Parameters.Add(new SqlParameter("@TasaInteres", unProyecto.tasaInteres));
+            cmd.Parameters.Add(new SqlParameter("@Tipo", unProyecto.GetType().Name.ToUpper()));
+
             SqlCommand cmd2 = new SqlCommand();
             cmd2.Connection = cn;
             SqlTransaction trn = null;
@@ -43,27 +45,24 @@ namespace Repositorios
                     cmd.ExecuteNonQuery();
 
                     trn = cn.BeginTransaction();
-
-
                     //Asignarle la transacción a cada uno de los comandos
                     //que querés que sean transaccionales:
                     cmd.Transaction = trn;
-                    //
-                    //
-                    //int idAsignado = (int)cmd.ExecuteScalar();
+                    int idAsignado = (int)cmd.ExecuteScalar();
                     if (unProyecto is Personal)
                     {
                         Personal per = (Personal)unProyecto;
-                        cmd2.CommandText = "INSERT INTO Personales VALUES (@Experiencia)";
+                        cmd2.CommandText = "INSERT INTO Personales VALUES (@Id,@Experiencia)";
+                        cmd2.Parameters.Add(new SqlParameter("@Id", idAsignado));
                         cmd2.Parameters.Add(new SqlParameter("@Experiencia", per.experiencia));
-                        //cmd2.Parameters.Add(new SqlParameter("@Pais", adm.Pais));
-                        //cmd2.Parameters.Add(new SqlParameter("@ImpuestoImportacion", ProductoImportado.ImpuestoImportacion));
+                         
 
                     }
                     else if (unProyecto is Cooperativo)
                     {
                         Cooperativo coo = (Cooperativo)unProyecto;
-                        cmd2.CommandText = "INSERT INTO Cooperativos VALUES (@cantIntegrantes)";
+                        cmd2.CommandText = "INSERT INTO Cooperativos VALUES (@Id,@cantIntegrantes)";
+                        cmd2.Parameters.Add(new SqlParameter("@Id", idAsignado));
                         cmd2.Parameters.Add(new SqlParameter("@cantIntegrantes", coo.cantIntegrantes));
                         
 
