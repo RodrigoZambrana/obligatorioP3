@@ -22,7 +22,7 @@ namespace Repositorios
 
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);SELECT CAST(SCOPE_IDENTITY() AS INT)", cn);
+            SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);", cn);
             cmd.Parameters.Add(new SqlParameter("@Titulo", unProyecto.titulo));
             cmd.Parameters.Add(new SqlParameter("@Descripcion", unProyecto.descripcion));
             cmd.Parameters.Add(new SqlParameter("@Monto", unProyecto.monto));

@@ -75,7 +75,7 @@ namespace Obligatorio.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Create");
+                    return RedirectToAction("Personal");
                 }
             }
             catch
