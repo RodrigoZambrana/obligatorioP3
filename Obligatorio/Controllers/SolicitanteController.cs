@@ -34,15 +34,11 @@ namespace Obligatorio.Controllers
 
         public ActionResult ProyectosDeUsuario()
         {
-            RepositorioProyectos repoProyectos = new RepositorioProyectos();
-            IEnumerable<Proyecto> listProyectos = null;
+            RepositorioProyectos repoProyectos = new RepositorioProyectos(); 
             string usuario = (string) Session["usuario"];
-            repoProyectos.ProyectosPorUsuario(usuario);
+            IEnumerable<Proyecto> listProyectos = repoProyectos.ProyectosPorUsuario(usuario);
 
-
-            //ViewBag.Message = "Your contact page.";
-
-            return View();
+            return View(listProyectos);
         }
 
 
