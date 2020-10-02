@@ -36,6 +36,9 @@ namespace Obligatorio.Controllers
         {
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
             IEnumerable<Proyecto> listProyectos = null;
+            string usuario = (string) Session["usuario"];
+            repoProyectos.ProyectosPorUsuario(usuario);
+
 
             //ViewBag.Message = "Your contact page.";
 
