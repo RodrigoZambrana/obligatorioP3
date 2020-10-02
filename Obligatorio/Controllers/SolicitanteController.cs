@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using Repositorios;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -32,6 +34,9 @@ namespace Obligatorio.Controllers
 
         public ActionResult ProyectosDeUsuario()
         {
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
+            IEnumerable<Proyecto> listProyectos = null;
+
             //ViewBag.Message = "Your contact page.";
 
             return View();

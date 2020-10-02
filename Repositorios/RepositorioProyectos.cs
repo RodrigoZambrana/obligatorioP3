@@ -98,7 +98,7 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        IEnumerable<Proyecto> ProyectosPorUsuario(string cedula)
+        public IEnumerable<Proyecto> ProyectosPorUsuario(string cedula)
         {
             throw new NotImplementedException();
         }
