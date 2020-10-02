@@ -85,6 +85,67 @@ namespace Obligatorio.Controllers
             }
         }
 
+        public ActionResult ListadoDeProyectos()
+        {
+            if (Session["usuario"] == null || (string)Session["rol"] == "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+                Session["role"] = null;
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ListadoDeProyectos(string proyectos, DateTime? fchFinalizado)
+        {
+            ViewBag.mensaje = " ";
+            if (proyectos != "" && proyectos != null && fchFinalizado != null)
+
+            {
+                Proyecto p = Empresa.Instancia.BuscarProyecto(proyectos);
+                if (p != null)
+
+                {
+                    if (Empresa.Instancia.FinalizarUnProyecto(p, (DateTime)fchFinalizado))
+
+                    {
+                        ViewBag.mensaje = "El proyecto se ha finalizado con exito";
+                    }
+                    else
+                    {
+                        ViewBag.mensaje = "El proyecto no se ha podido finalizar. La fecha de finalizacion debe ser mayor a la fecha de comienzo.";
+
+                    }
+
+                }
+                else
+
+                {
+
+                    ViewBag.mensaje = "Seleccione un proyecto para ser finalizado";
+
+                }
+
+            }
+            else
+
+            {
+
+                ViewBag.mensaje = "Debe seleccionar un proyecto y una fecha valida para finalizar el proyecto";
+
+            }
+
+
+            List<Proyecto> prox = Empresa.Instancia.ListadoDeProyectosParaFinalizar();
+            return View(prox);
+        }
+
+
+
+
+
         // GET: Proyecto/Edit/5
         public ActionResult Edit(int id)
         {

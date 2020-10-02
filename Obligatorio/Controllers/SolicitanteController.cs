@@ -29,5 +29,14 @@ namespace Obligatorio.Controllers
 
             return View();
         }
+
+        public ActionResult ProyectosDeUsuario()
+        {
+            //ViewBag.Message = "Your contact page.";
+
+            return View();
+        }
+
+
     }
 }

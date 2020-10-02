@@ -98,6 +98,11 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
+        IEnumerable<Proyecto> ProyectosPorUsuario(string cedula)
+        {
+            throw new NotImplementedException();
+        }
+
         Proyecto IRepositorio<Proyecto>.FindById(object clave)
         {
             throw new NotImplementedException();

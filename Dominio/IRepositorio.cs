@@ -13,5 +13,6 @@ namespace Dominio
         bool Update(T unT);
         T FindById(object clave);
         IEnumerable<T> FindAll();
+
     }
 }

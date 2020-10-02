@@ -172,6 +172,7 @@
     <Content Include="Views\Proyecto\Cooperativo.cshtml" />
     <Content Include="Views\Proyecto\Personal.cshtml" />
     <Content Include="Views\Proyecto\Index.cshtml" />
+    <Content Include="Views\Proyecto\ListadoDeProyectos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
