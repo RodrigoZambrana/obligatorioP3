@@ -104,41 +104,13 @@ namespace Obligatorio.Controllers
             if (proyectos != "" && proyectos != null && fchFinalizado != null)
 
             {
-                Proyecto p = Empresa.Instancia.BuscarProyecto(proyectos);
-                if (p != null)
-
-                {
-                    if (Empresa.Instancia.FinalizarUnProyecto(p, (DateTime)fchFinalizado))
-
-                    {
-                        ViewBag.mensaje = "El proyecto se ha finalizado con exito";
-                    }
-                    else
-                    {
-                        ViewBag.mensaje = "El proyecto no se ha podido finalizar. La fecha de finalizacion debe ser mayor a la fecha de comienzo.";
-
-                    }
-
-                }
-                else
-
-                {
-
-                    ViewBag.mensaje = "Seleccione un proyecto para ser finalizado";
-
-                }
-
-            }
-            else
-
-            {
-
-                ViewBag.mensaje = "Debe seleccionar un proyecto y una fecha valida para finalizar el proyecto";
+               
+                ViewBag.mensaje = "Debe seleccionar un proyecto";
 
             }
 
 
-            List<Proyecto> prox = Empresa.Instancia.ListadoDeProyectosParaFinalizar();
+            List<Proyecto> prox = new List<Proyecto>();
             return View(prox);
         }
 
