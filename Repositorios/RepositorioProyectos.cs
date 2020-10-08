@@ -127,17 +127,22 @@ namespace Repositorios
                         RepositorioProyectos repoProyectos = new RepositorioProyectos();
                         if (dr["Tipo"].ToString() == "PERSONAL")
                         {
-                            //listaProyectos.Add(new Personal
-                            //{
-                            //cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
-                            //nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
-                            //apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
-                            //fechaNacimiento = (DateTime)dr["FechaNacimiento"];
-                            //password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
-                            //celular = dr["Celular"] != DBNull.Value ? dr["Celular"].ToString() : "No tenés Password!";
-                            //email = dr["Email"] != DBNull.Value ? dr["Email"].ToString() : "No tenés Password!";
-                            //experiencia = (string)dr["Experiencia"],                          
-                            //});
+                            listaProyectos.Add(new Personal
+                            {
+                                id= (int)dr["Id"],
+                                //cedula
+                                titulo= (string)dr["Titulo"],
+                                descripcion = (string)dr["Descripcion"],
+                                monto=(decimal)dr["Monto"],
+                                cuotas=(int)dr["Cuotas"],
+                                rutaImagen = (string)dr["NombreImagen"],
+                                estado = (string)dr["Estado"],
+                                fechaPresentacion = (DateTime)dr["FechaPresentacion"],
+                                puntaje = (int)dr["Puntaje"],
+                                tasaInteres = (decimal)dr["TasaInteres"],
+                                experiencia = (string)dr["Experiencia"]
+
+                            });
 
                         }
 
@@ -146,6 +151,17 @@ namespace Repositorios
                             listaProyectos.Add(new Cooperativo
 
                             {
+                                id = (int)dr["Id"],
+                                //cedula
+                                titulo = (string)dr["Titulo"],
+                                descripcion = (string)dr["Descripcion"],
+                                monto = (decimal)dr["Monto"],
+                                cuotas = (int)dr["Cuotas"],
+                                rutaImagen = (string)dr["NombreImagen"],
+                                estado = (string)dr["Estado"],
+                                fechaPresentacion = (DateTime)dr["FechaPresentacion"],
+                                puntaje = (int)dr["Puntaje"],
+                                tasaInteres = (decimal)dr["TasaInteres"],
                                 cantIntegrantes = (int)dr["CantIntegrantes"],
 
                             });
