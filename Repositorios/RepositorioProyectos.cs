@@ -100,7 +100,77 @@ namespace Repositorios
 
         public IEnumerable<Proyecto> ProyectosPorUsuario(string cedula)
         {
-            throw new NotImplementedException();
+      
+            Conexion unaCon = new Conexion();
+
+            SqlConnection cn = unaCon.CrearConexion();
+
+            SqlCommand cmd = new SqlCommand(@"SELECT P.Id,P.Cedula,P.Titulo,P.Descripcion,P.Monto,P.Cuotas,
+              P.NombreImagen,P.Estado,P.FechaPresentacion,P.Puntaje,P.TasaInteres,P.Tipo,PE.Experiencia,C.CantIntegrantes
+                 FROM Proyectos P
+                 LEFT JOIN Personales PE ON P.Id = PE.Id 
+                 LEFT JOIN Cooperativos C ON P.Id = C.Id
+                 WHERE P.Cedula=@cedula;", cn);
+
+            cmd.Parameters.AddWithValue("@cedula", cedula);
+
+            // JOIN LEFT mágico para poder traer la tabla completa
+
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    List<Proyecto> listaProyectos = new List<Proyecto>();
+                    while (dr.Read())
+                    {
+                        RepositorioProyectos repoProyectos = new RepositorioProyectos();
+                        if (dr["Tipo"].ToString() == "PERSONAL")
+                        {
+                            //listaProyectos.Add(new Personal
+                            //{
+                            //cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
+                            //nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
+                            //apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
+                            //fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+                            //password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+                            //celular = dr["Celular"] != DBNull.Value ? dr["Celular"].ToString() : "No tenés Password!";
+                            //email = dr["Email"] != DBNull.Value ? dr["Email"].ToString() : "No tenés Password!";
+                            //experiencia = (string)dr["Experiencia"],                          
+                            //});
+
+                        }
+
+                        else if (dr["Tipo"].ToString() == "COOPERATIVO")
+                        {
+                            listaProyectos.Add(new Cooperativo
+
+                            {
+                                cantIntegrantes = (int)dr["CantIntegrantes"],
+
+                            });
+
+                        }
+
+                    }
+                    return listaProyectos;
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
+
         }
 
         Proyecto IRepositorio<Proyecto>.FindById(object clave)
