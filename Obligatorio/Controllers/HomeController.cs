@@ -158,7 +158,7 @@ namespace Obligatorio.Controllers
             int num = 0;
             int may = 0;
             int min = 0;
-            if (pass.Length > 5)
+            if (pass.Length < 5)
             {
                 return valido;
             }
@@ -166,15 +166,15 @@ namespace Obligatorio.Controllers
             {
                 if (Char.IsNumber(c))
                 {
-                    num = num++;
+                    num = num + 1;
                 }
                 if (Char.IsUpper(c))
                 {
-                    may = may++;
+                    may = may + 1;
                 }
                 else
                 {
-                    min = min++;
+                    min = min + 1;
                 }
             }
             if(min == 0 || may == 0 || num == 0)
