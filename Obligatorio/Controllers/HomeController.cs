@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using Dominio;
@@ -77,24 +78,145 @@ namespace Obligatorio.Controllers
         // POST: Home/Create
         [HttpPost]
         public ActionResult Create(Solicitante solicitante)
-        {
+        {                        
             RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
             try
             {
-                bool agregado = repoUsuarios.Add(solicitante);
-                if (agregado)
-                {
+                bool validarCi = validarCedula(solicitante.cedula);
+                bool validarCel = validarCelular(solicitante.celular);
+                bool validarCorreo = validarEmail(solicitante.email);
+                bool validarPass = validarPassword(solicitante.password);
+                if (validarCi)
+                    {
+                    if (validarCel)
+                    {
+                        if (validarCorreo)
+                        {
+                            if (validarPass)
+                            {
+                                bool agregado = repoUsuarios.Add(solicitante);
+                                if (agregado)
+                                {
 
-                    return RedirectToAction("Index", "Solicitante", solicitante);
+                                    return RedirectToAction("Index", "Solicitante", solicitante);
+                                }
+                                else
+                                {
+                                    return RedirectToAction("Create");
+                                }
+                            }
+                            else
+                            {
+                                ViewBag.Mensaje = "Contraseña incorrecta";
+                                return View();
+                            }                                
+                        }
+                        else
+                        {
+                            ViewBag.Mensaje = "Correo incorrecto";
+                            return View();
+                        }                        
+                    }
+                    else
+                    {
+                        ViewBag.Mensaje = "Celular incorrecto";
+                        return View();
+                    }
                 }
-                else {
-                    return RedirectToAction("Create");
+                else
+                {
+                    ViewBag.Mensaje = "Cédula incorrecta";
+                    return View();
                 }
             }
             catch
             {
                 return View();
             }
+        }
+
+        private bool validarCedula(string ci)
+        {
+            bool valido = false;
+            if(ci.Length != 8)
+            {
+                return valido;
+            }
+            foreach(char c in ci)
+            {
+                if (!Char.IsNumber(c))
+                {
+                    return valido;
+                }
+            }           
+            return true;
+        }
+
+        private bool validarPassword(string pass)
+        {
+            bool valido = false;
+            int num = 0;
+            int may = 0;
+            int min = 0;
+            if (pass.Length > 5)
+            {
+                return valido;
+            }
+            foreach (char c in pass)
+            {
+                if (Char.IsNumber(c))
+                {
+                    num = num++;
+                }
+                if (Char.IsUpper(c))
+                {
+                    may = may++;
+                }
+                else
+                {
+                    min = min++;
+                }
+            }
+            if(min == 0 || may == 0 || num == 0)
+            {
+                return valido;
+            }
+            return true;
+        }
+
+        private bool validarCelular(string cel)
+        {
+            bool valido = false;
+            if (cel.Length != 9)
+            {
+                return valido;
+            }
+            foreach (char c in cel)
+            {
+                if (!Char.IsNumber(c))
+                {
+                    return valido;
+                }
+            }
+            if(cel[0].ToString() != "0")
+            {
+                return valido;
+            }
+            if (cel[1].ToString() != "9")
+            {
+                return valido;
+            }
+            if (cel[2].ToString() == "0")
+            {
+                return valido;
+            }
+            return true;
+        }
+        private bool validarEmail(string email)
+        {
+            Regex re = new Regex(@"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$",
+            RegexOptions.IgnoreCase);
+            return re.IsMatch(email);
         }
 
         // GET: Home/Edit/5
