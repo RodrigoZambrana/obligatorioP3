@@ -1,47 +1,70 @@
-﻿@{ ViewBag.Title = "Index";
-                Layout = "~/Views/Shared/_Layout.cshtml"; }
+﻿@model IEnumerable<Dominio.Usuario>
 
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Nombre Proyecto</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Fecha de presentación</th>
-            <th scope="col">Monto solicitado</th>
-            <th scope="col">Monto con interés</th>
-            <th scope="col">Cantidad de cuotas</th>
-            <th scope="col">Monto de c</th>
-            <th scope="col">Imagen</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-            <td>mdo</td>
-            <td>mdo</td>
-            <td>mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>twitter</td>
-        </tr>
-    </tbody>
-</table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.cedula)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.apellido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fechaNacimiento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.password)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.celular)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>*@
+        <th></th>
+    </tr>
 
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.cedula)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.apellido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fechaNacimiento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.password)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.celular)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -88,7 +88,58 @@ namespace Repositorios
 
         public IEnumerable<Usuario> FindAll()
         {
-            throw new NotImplementedException();
+
+            Conexion unaCon = new Conexion();
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmd = new SqlCommand(@"SELECT U.Cedula,U.Nombre,U.Apellido,U.FechaNacimiento,U.Password,U.Tipo,S.Celular,S.Email
+            FROM Usuarios U
+            RIGHT JOIN Solicitantes S ON U.Cedula = S.Cedula;", cn);
+
+            // JOIN LEFT mágico para poder traer la tabla completa
+
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    List<Usuario> listaSolicitantes = new List<Usuario>();
+                    while (dr.Read())
+                    {
+                        
+                            listaSolicitantes.Add(new Solicitante
+                            {
+                           
+                        cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!",
+                        nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!",
+                        apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!",
+                        fechaNacimiento = (DateTime)dr["FechaNacimiento"],
+                        password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!",
+                        celular = dr["Celular"] != DBNull.Value ? dr["Celular"].ToString() : "No tenés Password!",
+                        email = dr["Email"] != DBNull.Value ? dr["Email"].ToString() : "No tenés Password!"
+
+                    });
+
+                        
+
+                    }
+                    return listaSolicitantes;
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
+
         }
 
         public Usuario FindById(object cedula)
