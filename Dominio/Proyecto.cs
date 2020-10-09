@@ -27,7 +27,12 @@ namespace Dominio
 
 		private cambioEstado cambioEstado;
 
-		private Solicitante solicitante;
+        public Solicitante solicitante { get; set; }
+
+        public void setSolicitante(Solicitante u)
+        {
+            this.solicitante = u;
+        }
 
         public bool Validar()
         {

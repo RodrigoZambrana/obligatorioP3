@@ -33,8 +33,15 @@ namespace Obligatorio.Controllers
         public ActionResult Cooperativo(Cooperativo pCooperativo)
         {
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
+           
+
+
             try
             {
+                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+                string usu= (string) Session["usuario"];
+                Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
+                pCooperativo.setSolicitante(u);
                 bool agregado = repoProyectos.Add(pCooperativo);
                 if (agregado)
                 {
@@ -67,6 +74,10 @@ namespace Obligatorio.Controllers
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
             try
             {
+                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+                string usu = (string)Session["usuario"];
+                Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
+                pPersonal.setSolicitante(u);
                 bool agregado = repoProyectos.Add(pPersonal);
                 if (agregado)
                 {

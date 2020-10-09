@@ -22,9 +22,8 @@ namespace Repositorios
 
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            string cedula = "123456";
             SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Cedula,@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);SELECT CAST(SCOPE_IDENTITY() AS INT)", cn);
-            cmd.Parameters.Add(new SqlParameter("@Cedula", cedula));
+            cmd.Parameters.Add(new SqlParameter("@Cedula", unProyecto.solicitante.cedula));
             cmd.Parameters.Add(new SqlParameter("@Titulo", unProyecto.titulo));
             cmd.Parameters.Add(new SqlParameter("@Descripcion", unProyecto.descripcion));
             cmd.Parameters.Add(new SqlParameter("@Monto", unProyecto.monto));

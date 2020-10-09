@@ -1,3 +1,4 @@
+using System;
 using Dominio;
 
 namespace Dominio
@@ -6,7 +7,8 @@ namespace Dominio
 	{
 		public int cantIntegrantes{ get; set; }
 
-	}
+       
+    }
 
 }
 
