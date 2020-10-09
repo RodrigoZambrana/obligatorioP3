@@ -43,12 +43,11 @@ namespace Repositorios
                 if (unaCon.AbrirConexion(cn))
                 {
                     //Inicia la transacción
-                    cmd.ExecuteNonQuery();
-
                     trn = cn.BeginTransaction();
                     //Asignarle la transacción a cada uno de los comandos
                     //que querés que sean transaccionales:
                     cmd.Transaction = trn;
+                    // cmd.ExecuteNonQuery();
                     int idAsignado = (int)cmd.ExecuteScalar();
                     if (unProyecto is Personal)
                     {
