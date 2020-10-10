@@ -23,10 +23,10 @@ namespace Obligatorio.Controllers
 
             string usuario = (string)Session["usuario"];
 
-            RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-            IEnumerable<Usuario> listSolicitantes =repoUsuarios.FindAll();
+            RepositorioProyectos repoUsuarios = new RepositorioProyectos();
+            IEnumerable<Proyecto> todosLosProyectos =repoUsuarios.FindAll();
 
-            return View (listSolicitantes);
+            return View (todosLosProyectos);
         }
 
     }

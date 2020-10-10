@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -93,10 +94,63 @@ namespace Repositorios
             }
         }
 
-        IEnumerable<Proyecto> IRepositorio<Proyecto>.FindAll()
+        public IEnumerable<Proyecto> FindAll()
         {
-            throw new NotImplementedException();
+            Conexion unaCon = new Conexion();
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmd = new SqlCommand(@"SELECT P.Id,P.Cedula,P.Titulo,P.Descripcion,P.Monto,P.Cuotas,
+              P.NombreImagen,P.Estado,P.FechaPresentacion,P.Puntaje,P.TasaInteres,P.Tipo
+              FROM Proyectos P;", cn);
+
+            // JOIN LEFT mágico para poder traer la tabla completa
+
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    List<Proyecto> listaProyectos = new List<Proyecto>();
+                    RepositorioUsuarios repoUsarios = new RepositorioUsuarios();
+                    while (dr.Read())
+                    {
+
+                        listaProyectos.Add(new Proyecto
+                        {
+                            id = (int)dr["Id"],
+                            // solicitante = repoUsarios.FindById((int)dr["Cedula"]), // findby id categoria
+                            titulo = (string)dr["Titulo"],
+                            descripcion = (string)dr["Descripcion"],
+                            monto = (decimal)dr["Monto"],
+                            cuotas = (int)dr["Cuotas"],
+                            rutaImagen = (string)dr["NombreImagen"],
+                            estado = (string)dr["Estado"],
+                            fechaPresentacion = (DateTime)dr["FechaPresentacion"],
+                            puntaje = (int)dr["Puntaje"],
+                            tasaInteres = (decimal)dr["TasaInteres"]
+
+                        });
+
+                    }
+                    return listaProyectos;
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
+
         }
+
 
         public IEnumerable<Proyecto> ProyectosPorUsuario(string cedula)
         {
@@ -189,10 +243,103 @@ namespace Repositorios
 
         }
 
-        Proyecto IRepositorio<Proyecto>.FindById(object clave)
+        public Proyecto FindById(object idProyecto)
         {
-            throw new NotImplementedException();
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmdCli = new SqlCommand(@"SELECT P.Id,P.Cedula,P.Titulo,P.Descripcion,P.Monto,P.Cuotas,
+              P.NombreImagen,P.Estado,P.FechaPresentacion,P.Puntaje,P.TasaInteres,P.Tipo,PE.Experiencia,C.CantIntegrantes
+                 FROM Proyectos P
+                 LEFT JOIN Personales PE ON P.Id = PE.Id 
+                 LEFT JOIN Cooperativos C ON P.Id = C.Id
+                 WHERE P.Id=@idProyecto;", cn);
+
+            cmdCli.Parameters.AddWithValue("@idProyecto", idProyecto);
+            try
+            {
+                Proyecto u = new Proyecto();
+                if (new Conexion().AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmdCli.ExecuteReader();
+                   
+                    if (dr.Read())
+                    {
+                        if (dr["Tipo"].ToString() == "PERSONAL")                          
+                        {
+                            Personal p = new Personal();
+                            p.id = (int)dr["Id"];
+                                //cedula
+                            p.titulo = (string)dr["Titulo"];
+                            p.descripcion = (string)dr["Descripcion"];
+                            p.monto = (decimal)dr["Monto"];
+                            p.cuotas = (int)dr["Cuotas"];
+                            p.rutaImagen = (string)dr["NombreImagen"];
+                            p.estado = (string)dr["Estado"];
+                            p.fechaPresentacion = (DateTime)dr["FechaPresentacion"];
+                            p.puntaje = (int)dr["Puntaje"];
+                            p.tasaInteres = (decimal)dr["TasaInteres"];
+                            p.experiencia = (string)dr["Experiencia"];
+
+                            return p;
+
+
+                        }
+                        else if (dr["Tipo"].ToString() == "COOPERATIVO")
+                        {
+                            Cooperativo c = new Cooperativo();
+                            c.id = (int)dr["Id"];
+                                //cedula
+                            c.titulo = (string)dr["Titulo"];
+                            c.descripcion = (string)dr["Descripcion"];
+                            c.monto = (decimal)dr["Monto"];
+                            c.cuotas = (int)dr["Cuotas"];
+                            c.rutaImagen = (string)dr["NombreImagen"];
+                            c.estado = (string)dr["Estado"];
+                            c.fechaPresentacion = (DateTime)dr["FechaPresentacion"];
+                            c.puntaje = (int)dr["Puntaje"];
+                            c.tasaInteres = (decimal)dr["TasaInteres"];
+                            c.cantIntegrantes = (int)dr["CantIntegrantes"];
+
+                            return c;
+
+
+                        }
+                    }
+                   
+                }
+                return u;
+
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                new Conexion().CerrarConexion(cn);
+            }
         }
+
+
+        private Usuario CargarClienteDesdeFila(IDataRecord dr)
+        {
+
+            /*int numColumnaApellido = dr.GetOrdinal("Apellido");
+			string apellido = dr.GetString(numColumnaApellido);*/
+
+            Usuario usu = new Usuario();
+            usu.cedula = dr["Cedula"] != DBNull.Value ? dr["Cedula"].ToString() : "No tenés cedula!";
+            usu.apellido = dr["Apellido"] != DBNull.Value ? dr["Apellido"].ToString() : "No tenés apellido!";
+            usu.nombre = dr["Nombre"] != DBNull.Value ? dr["Nombre"].ToString() : "No tenés nombre!";
+            usu.password = dr["Password"] != DBNull.Value ? dr["Password"].ToString() : "No tenés Password!";
+            usu.fechaNacimiento = (DateTime)dr["FechaNacimiento"];
+
+            return usu;
+        }
+
 
         bool IRepositorio<Proyecto>.Remove(Proyecto unT)
         {
@@ -204,24 +351,45 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Proyecto> FindAll()
-        {
-            throw new NotImplementedException();
-        }
 
-        public Proyecto FindById(object clave)
-        {
-            throw new NotImplementedException();
-        }
-
+     
         public bool Remove(Proyecto unT)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(Proyecto unT)
+        public bool Update(Proyecto unProyecto)
         {
-            throw new NotImplementedException();
+
+            //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
+
+            if (unProyecto == null || !unProyecto.Validar())
+                return false;
+
+            int id = unProyecto.id;
+            Conexion unaCon = new Conexion();
+            SqlConnection cn = unaCon.CrearConexion();
+            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;", cn);
+
+            cmd.Parameters.Add(new SqlParameter("@Estado", unProyecto.estado));
+            cmd.Parameters.Add(new SqlParameter("@id",id));
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+              return false;
+            }
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
         }
     }
 

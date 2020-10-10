@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Personal</h2>
+<h2>Ingresar proyecto</h2>
 @using (Html.BeginForm())
 {
     if ((int)Session["edad"] >= 21)
@@ -106,14 +106,14 @@
     }
     else
     {<div class="alert alert-danger" role="alert">
-    A simple danger alert—check it out!
+    Para poder ingresar un proyecto debes ser mayor a 21 años.
 </div>}
 }
 
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+     <div>
+         @Html.ActionLink("Atras", "Index", "Solicitante")
+     </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

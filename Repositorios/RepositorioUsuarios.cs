@@ -145,8 +145,6 @@ namespace Repositorios
         public Usuario FindById(object cedula)
         {
             string c = cedula.ToString();
-
-
             SqlConnection cn = new Conexion().CrearConexion();
             SqlCommand cmdCli = new SqlCommand(@"SELECT U.Cedula,U.Nombre,U.Apellido,U.FechaNacimiento,U.Password,U.Tipo,S.Celular,S.Email,A.Cedula
            FROM Usuarios U

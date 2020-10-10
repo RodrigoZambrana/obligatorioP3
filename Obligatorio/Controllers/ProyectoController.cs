@@ -25,14 +25,8 @@ namespace Obligatorio.Controllers
         // GET: Proyecto/Cooperativo
         public ActionResult Cooperativo()
         {
-            RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-            string cedula = (string)Session["usuario"];
-            Usuario u = repoUsuarios.FindById(cedula);
-           
-
-                ViewBag.mensaje = "El empleado se ha borrado";
-
-            
+        
+          
             return View();
         }
 
@@ -132,24 +126,27 @@ namespace Obligatorio.Controllers
         }
 
 
-
-
-
-        // GET: Proyecto/Edit/5
+        // GET: Proyecto/Edit/
         public ActionResult Edit(int id)
         {
-            return View();
+            RepositorioProyectos repositorioProyectos = new RepositorioProyectos();
+            Proyecto p = repositorioProyectos.FindById(id);
+                
+            return View(p);
         }
 
         // POST: Proyecto/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Proyecto p)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                RepositorioProyectos repo = new RepositorioProyectos();
+                bool actualizado= repo.Update(p);
+                if (actualizado) {
+                    return RedirectToAction("Index", "Admin");
+                }
+                return View(p);
             }
             catch
             {
