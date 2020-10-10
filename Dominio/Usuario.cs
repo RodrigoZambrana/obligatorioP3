@@ -19,6 +19,14 @@ namespace Dominio
         {
             return true;
         }
+
+        public int Edad()
+        {
+            int anios = 0;
+            anios = DateTime.Now.Year - this.fechaNacimiento.Year;
+            return anios;
+        }
+
     }
 
 }

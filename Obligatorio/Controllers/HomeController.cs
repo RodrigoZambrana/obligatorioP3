@@ -25,11 +25,12 @@ namespace Obligatorio.Controllers
             Usuario u = repoUsuarios.FindById(cedula);
             if (u != null && u.password.Equals(password))
             {
-
+               
                 Session["usuario"] = u.cedula;
                 Session["rol"] = u.GetType().Name.ToUpper();
+                Session["edad"] = u.Edad();
 
-                 if (u is Admin)
+                if (u is Admin)
                 {
                     Admin a= (Admin) u;
                     return RedirectToAction("Index", "Admin", a);

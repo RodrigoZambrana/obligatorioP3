@@ -25,6 +25,14 @@ namespace Obligatorio.Controllers
         // GET: Proyecto/Cooperativo
         public ActionResult Cooperativo()
         {
+            RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+            string cedula = (string)Session["usuario"];
+            Usuario u = repoUsuarios.FindById(cedula);
+           
+
+                ViewBag.mensaje = "El empleado se ha borrado";
+
+            
             return View();
         }
 
@@ -34,8 +42,6 @@ namespace Obligatorio.Controllers
         {
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
            
-
-
             try
             {
                 RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();

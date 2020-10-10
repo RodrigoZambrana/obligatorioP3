@@ -22,24 +22,14 @@ namespace Obligatorio.Controllers
             }
 
             string usuario = (string)Session["usuario"];
-            return View ();
-        }
-
-        public ActionResult PresentarProyecto()
-        {
-            //ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        public ActionResult ProyectosDeUsuario()
-        {
-            RepositorioProyectos repoProyectos = new RepositorioProyectos(); 
-            string usuario = (string) Session["usuario"];
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
             IEnumerable<Proyecto> listProyectos = repoProyectos.ProyectosPorUsuario(usuario);
 
             return View(listProyectos);
         }
+        
+
+      
 
 
     }
