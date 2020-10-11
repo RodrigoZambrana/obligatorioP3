@@ -390,9 +390,92 @@ namespace Repositorios
             {
                 unaCon.CerrarConexion(cn);
             }
+
         }
+
+
+        public IEnumerable<Proyecto> Filtrar(string cedula, DateTime fecha, string estado, string texto)
+        {
+
+
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmdCli = new SqlCommand(@"SELECT P.Id,P.Cedula,P.Titulo,P.Descripcion,P.Monto,P.Cuotas,
+              P.NombreImagen,P.Estado,P.FechaPresentacion,P.Puntaje,P.TasaInteres
+                 FROM Proyectos P
+                 
+                 WHERE 1=1   ", cn);
+            if (cedula !=null || cedula != "") {
+                cmdCli.CommandText += "AND  P.Cedula=@Cedula";
+                cmdCli.Parameters.AddWithValue("Cedula", cedula);
+            }
+            if (fecha != null)
+            {
+                cmdCli.CommandText += "AND  P.FechaPresentacion=@Fecha";
+                cmdCli.Parameters.AddWithValue("Fecha", fecha);
+            }
+            if (estado != null || estado != "")
+            {
+                cmdCli.CommandText += "AND  P.Estado=@Estado";
+                cmdCli.Parameters.AddWithValue("Estado", estado);
+            }
+            if (texto != null || texto != "")
+            {
+                cmdCli.CommandText += "AND  P.Titulo LIKE %@Texto%"  ;
+                cmdCli.CommandText += "OR  P.Descripcion LIKE %@Texto%";
+                cmdCli.Parameters.AddWithValue("Texto", texto);
+            }
+
+
+            try
+            {
+                Proyecto u = new Proyecto();
+                List<Proyecto> proyectosfilt = new List<Proyecto>();
+                if (new Conexion().AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmdCli.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+
+                        proyectosfilt.Add(new Proyecto
+                        {
+                            id = (int)dr["Id"],
+                            // solicitante = repoUsarios.FindById((int)dr["Cedula"]), // findby id categoria
+                            titulo = (string)dr["Titulo"],
+                            descripcion = (string)dr["Descripcion"],
+                            monto = (decimal)dr["Monto"],
+                            cuotas = (int)dr["Cuotas"],
+                            rutaImagen = (string)dr["NombreImagen"],
+                            estado = (string)dr["Estado"],
+                            fechaPresentacion = (DateTime)dr["FechaPresentacion"],
+                            puntaje = (int)dr["Puntaje"],
+                            tasaInteres = (decimal)dr["TasaInteres"]
+
+                        });
+
+                    }
+                    return proyectosfilt;
+
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                new Conexion().CerrarConexion(cn);
+            }
+        }
+
     }
 
-       
-    }
+
+
+}
 
