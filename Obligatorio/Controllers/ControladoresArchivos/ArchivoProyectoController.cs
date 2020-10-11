@@ -17,6 +17,7 @@ namespace Obligatorio.Controllers.ControladoresArchivos
 
         public ActionResult Index()
         {
+            ViewBag.LaRuta = ArchivoProyectos;
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
@@ -49,7 +50,7 @@ namespace Obligatorio.Controllers.ControladoresArchivos
                 string linea = sr.ReadLine();
                 while ((linea != null))
                 {
-                    if (linea.IndexOf(";") > 0)
+                    if (linea.IndexOf("|") > 0)
                     {
                         retorno.Add(ObtenerDesdeString(linea, ";"));
                     }

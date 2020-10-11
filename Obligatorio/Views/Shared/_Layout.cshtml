@@ -26,6 +26,7 @@
                         if ((string)Session["rol"] == "ADMIN")
                         {
                             <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+                            <li>@Html.ActionLink("Archivo Proyecto", "Index", "ArchivoProyecto")</li>
 
                         }
                         if ((string)Session["rol"] == "SOLICITANTE")
@@ -40,9 +41,9 @@
 
                                     <a class="dropdown-item" href="/Proyecto/Cooperativo">Cooperativo</a>
                                     <a class="dropdown-item" href="/Proyecto/Personal">Personal</a>
-                                    
+
                                 </div>
-                            </li>                    
+                            </li>
 
 
                         }
