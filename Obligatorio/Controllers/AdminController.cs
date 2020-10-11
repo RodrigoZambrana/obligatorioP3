@@ -39,10 +39,7 @@ namespace Obligatorio.Controllers
         [HttpPost]
         public ActionResult Filtrar(string cedula,DateTime fecha, string estado, string texto)
         {
-            
-
-            
-
+           
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
             IEnumerable<Proyecto> ProyectosFiltrados = repoProyectos.Filtrar(cedula,fecha,estado,texto);
 

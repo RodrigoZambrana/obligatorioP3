@@ -401,7 +401,7 @@ namespace Repositorios
             SqlConnection cn = new Conexion().CrearConexion();
             SqlCommand cmdCli = new SqlCommand(@"SELECT P.Id,P.Cedula,P.Titulo,P.Descripcion,P.Monto,P.Cuotas,
               P.NombreImagen,P.Estado,P.FechaPresentacion,P.Puntaje,P.TasaInteres
-                 FROM Proyectos P
+              FROM Proyectos P
                  
                  WHERE 1=1   ", cn);
             if (cedula !=null || cedula != "") {

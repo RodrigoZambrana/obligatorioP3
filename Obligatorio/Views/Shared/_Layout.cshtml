@@ -27,6 +27,7 @@
                         {
                             <li>@Html.ActionLink("Home", "Index", "Admin")</li>
                             <li>@Html.ActionLink("Archivo Proyecto", "Index", "ArchivoProyecto")</li>
+                            <li>@Html.ActionLink("Filtrar Proyectos", "Filtrar", "Admin")</li>
 
                         }
                         if ((string)Session["rol"] == "SOLICITANTE")

@@ -12,12 +12,12 @@ namespace Obligatorio.Controllers.ControladoresArchivos
 {
     public class ArchivoProyectoController : Controller
     {
-        private static string ArchivoProyectos = AppDomain.CurrentDomain.BaseDirectory + "\\Proyectos.txt";
+        private static string ArchivoProyectos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Proyectos.txt");
         private const int CANT_ATRIBUTOS_Proyecto = 3;
 
         public ActionResult Index()
         {
-            ViewBag.LaRuta = ArchivoProyectos;
+            ViewBag.LaRuta=ArchivoProyectos;
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
