@@ -26,7 +26,7 @@
                         if ((string)Session["rol"] == "ADMIN")
                         {
                             <li>@Html.ActionLink("Home", "Index", "Admin")</li>
-                            <li>@Html.ActionLink("Filtrar Proyectos", "Filtrar", "Admin")</li>
+                            <li>@Html.ActionLink("Archivo Proyecto", "Index", "ArchivoProyecto")</li>
 
                         }
                         if ((string)Session["rol"] == "SOLICITANTE")
