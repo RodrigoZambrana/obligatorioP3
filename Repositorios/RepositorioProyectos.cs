@@ -340,6 +340,42 @@ namespace Repositorios
             return usu;
         }
 
+        public List<int> CargarCuotas()
+        {
+            Conexion unaCon = new Conexion();
+            SqlConnection cn = new Conexion().CrearConexion();
+            SqlCommand cmd = new SqlCommand(@"SELECT c.Cuotas FROM Cuota_Tasa c;", cn);
+
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    List<int> listaCuotas = new List<int>();
+                    while (dr.Read())
+                    {
+                        listaCuotas.Add((int)dr["Cuotas"]);
+
+                    }
+                    return listaCuotas;
+                }
+                return null;
+            }
+            catch (SqlException ex)
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
+
+        }
 
         bool IRepositorio<Proyecto>.Remove(Proyecto unT)
         {
