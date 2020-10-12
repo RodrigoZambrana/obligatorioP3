@@ -114,3 +114,11 @@
     margin-top: 60%;
     font-size: 14px;
 }
+
+.ocultar {
+    display: none;
+}
+
+.mostrar {
+    display: block;
+}

@@ -16,37 +16,53 @@ namespace Obligatorio.Controllers
             return View();
         }
 
-        // GET: Proyecto/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Proyecto/Cooperativo
-        public ActionResult Cooperativo()
-        {
-        
-          
-            return View();
-        }
-
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Cooperativo(Cooperativo pCooperativo)
+        public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia,string imagen)
         {
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
            
             try
             {
                 RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-                string usu= (string) Session["usuario"];
+                string usu = (string)Session["usuario"];
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
-                pCooperativo.setSolicitante(u);
-                bool agregado = repoProyectos.Add(pCooperativo);
-                if (agregado)
+                Proyecto p = new Proyecto();
+
+                if (tipoProyecto == "Cooperativo")
+                {
+                    p = new Cooperativo
+                    {
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        monto = monto,
+                        cuotas = cantidadCuotas,
+                        cantIntegrantes = (int)cantidadIntegrantes,
+                        rutaImagen = imagen,
+                        solicitante = u,
+
+                    };
+                }
+
+                if (tipoProyecto == "Personal")
+                {
+                    p = new Personal
+                    {
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        monto = monto,
+                        cuotas = cantidadCuotas,
+                        experiencia = experiencia,
+                        rutaImagen = imagen,
+                        solicitante = u
+
+                    };
+                }
+
+                if (repoProyectos.Add(p))
                 {
 
-                    return RedirectToAction("Index", "Solicitante");
+                    return View("Confirmar", p);
                 }
                 else
                 {
@@ -65,66 +81,6 @@ namespace Obligatorio.Controllers
         {
             return View();
         }
-
-        // POST: Proyecto/Create
-        [HttpPost]
-        public ActionResult Personal(Personal pPersonal)
-        {
-
-            RepositorioProyectos repoProyectos = new RepositorioProyectos();
-            try
-            {
-                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-                string usu = (string)Session["usuario"];
-                Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
-                pPersonal.setSolicitante(u);
-                bool agregado = repoProyectos.Add(pPersonal);
-                if (agregado)
-                {
-
-                    return RedirectToAction("Index", "Solicitante");
-                }
-                else
-                {
-                    return RedirectToAction("Personal");
-                }
-            }
-            catch
-            {
-                return RedirectToAction("Index", "Proyecto");
-
-            }
-        }
-
-        public ActionResult ListadoDeProyectos()
-        {
-            if (Session["usuario"] == null || (string)Session["rol"] == "SOLICITANTE")
-            {
-                Session["usuario"] = null;
-                Session["role"] = null;
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ListadoDeProyectos(string proyectos, DateTime? fchFinalizado)
-        {
-            ViewBag.mensaje = " ";
-            if (proyectos != "" && proyectos != null && fchFinalizado != null)
-
-            {
-               
-                ViewBag.mensaje = "Debe seleccionar un proyecto";
-
-            }
-
-
-            List<Proyecto> prox = new List<Proyecto>();
-            return View(prox);
-        }
-
 
         // GET: Proyecto/Edit/
         public ActionResult Edit(int id)
@@ -155,25 +111,56 @@ namespace Obligatorio.Controllers
         }
 
         // GET: Proyecto/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Confirmar()
+        //{
+        //    return View();
+        //}
 
         // POST: Proyecto/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Confirmar(Proyecto p)
         {
+
             try
             {
-                // TODO: Add delete logic here
+                RepositorioProyectos repoProyectos = new RepositorioProyectos();
+                bool agregado = repoProyectos.Add(p);
+                if (agregado)
+                {
 
-                return RedirectToAction("Index");
+                    return View("Guardar", p);
+                }
+                return View(p);
             }
             catch
             {
                 return View();
             }
         }
+
+
+        // GET: Proyecto/Delete/5
+        //public ActionResult Confirmar()
+        //{
+        //    return View();
+        //}
+
+        // POST: Proyecto/Delete/5
+        [HttpPost]
+        public ActionResult Guardar(Proyecto p)
+        {
+            try
+            {
+
+
+                return RedirectToAction("Index", "Solicitante");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
     }
 }

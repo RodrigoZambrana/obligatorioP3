@@ -6,6 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/scripts.js"></script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -34,17 +35,8 @@
 
                         {
                             <li>@Html.ActionLink("Home", "Index", "Solicitante")</li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Presentar Proyecto
-                                </a>
-                                <div class="dropdown-menu">
+                            <li>@Html.ActionLink("Presentar Proyecto", "Index", "Proyecto")</li>
 
-                                    <a class="dropdown-item" href="/Proyecto/Cooperativo">Cooperativo</a>
-                                    <a class="dropdown-item" href="/Proyecto/Personal">Personal</a>
-
-                                </div>
-                            </li>
 
 
                         }
@@ -57,19 +49,20 @@
                     }
 
                 </ul>
-                </div>
+            </div>
         </div>
     </div>
 
     <div class="container body-content">
 
         <hr />
-           
+
         @RenderBody()
     </div>
-   
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/Scripts/scripts.js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

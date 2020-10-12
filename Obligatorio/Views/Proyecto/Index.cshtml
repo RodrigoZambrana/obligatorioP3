@@ -1,82 +1,114 @@
-﻿@model IEnumerable<Dominio.Proyecto>
+﻿@model Dominio.Proyecto
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script src="~/Scripts/scripts.js"></script>
+<h2>Ingresar proyecto</h2>
+@if ((int)Session["edad"] >=21)
+{
+<form method="post" action="/Proyecto/Index">
+    <div class="form-horizontal">
+        <hr />
+        <div class="form-group row">
+            <label class="col-lg-2">Titulo del proyecto</label>
+            <input type="text" class="form-control col-lg-2" name="titulo" id="titulo" required>
+        </div>
 
-<h2>Index</h2>
+        <div class="form-group row">
+            <label class="col-lg-2">Descripción</label>
+            <input type="text" class="form-control col-lg-2" name="descripcion" id="descripcion" required>
+        </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.titulo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.descripcion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.monto)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.cuotas)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.rutaImagen)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.fechaPresentacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.puntaje)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.tasaInteres)
-        </th>
-        <th></th>
-    </tr>
+        <div class="form-group row">
+            <label class="col-lg-2">Monto a solicitar</label>
+            <input type="text" class="form-control col-lg-2" name="monto" id="monto" required>
+        </div>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.titulo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.descripcion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.monto)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.cuotas)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.rutaImagen)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.fechaPresentacion)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.puntaje)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.tasaInteres)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
+        <div class="form-group">
+            <label class="control-label col-md-2">Cantidad Cuotas</label>
+            <select name="cantidadCuotas" id="cantidadCuotas" class="form-control" required>
+                <option value="" disabled selected>Seleccione cantidad cuotas</option>
+                <option value=1>1</option>
+                <option value=2>2</option>
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Tipo de proyecto</label>
+            <select name="tipoProyecto" id="tipoProyecto" class="form-control" onchange="tipoProyecto();" required>
+                <option value="" disabled selected>Seleccione un tipo de proyecto</option>
+                <option value="Cooperativo">Cooperativo</option>
+                <option value="Personal">Personal</option>
+
+            </select>
+        </div>
+
+        @*Si es un proyecto cooperativo el campo cantidad de integrantes se muestra*@
+
+        <div id="divCantIntegrantes" class="form-group" hidden>
+            <label class="control-label col-md-2">Cantidad de integrantes</label>
+            <input class="form-control" type="number" id="cantidadIntegrantes" name="cantidadIntegrantes">
+        </div>
+
+        @*Si es un proyecto personal el campo experinecia se muestra*@
+
+        <div id="divExperiencia" class="form-group" hidden>
+            <label class="control-label col-md-2 ">Experiencia</label>
+            <input class="form-control " type="text" id="experiencia" name="experiencia">
+        </div>
+
+        <div id="" class="form-group">
+            <label class="control-label col-md-2 ">Imagen</label>
+            <input class="form-control " type="file" id="imagen" name="imagen" required>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default">
+            </div>
+        </div>
+    </div>
+</form>
+
+    <div>
+        @Html.ActionLink("Ver todos", "Index","Solicitante")
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        Para ingresar proyectos debe ser mayor a 21 años!
+    </div>
 }
 
-</table>
+
+
+@section  scripts{
+
+    <script type="text/javascript">
+
+        $("#tipoProyecto").change(function () {
+
+            var mivalor = $(this).val();
+
+            if (mivalor == "Cooperativo") {
+
+                $("#divCantIntegrantes").show();
+                $("#divExperiencia").hide();
+
+            } else {
+
+                $("#divExperiencia").show();
+                $("#divCantIntegrantes").hide();
+
+            }
+
+        })
+
+    </script>
+
+}
+
