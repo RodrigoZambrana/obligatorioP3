@@ -28,9 +28,5 @@ namespace Obligatorio.Controllers
             return View(listProyectos);
         }
         
-
-      
-
-
     }
 }
