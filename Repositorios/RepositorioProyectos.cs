@@ -406,23 +406,23 @@ namespace Repositorios
                  WHERE 1=1   ", cn);
             if (cedula !=null || cedula != "") {
                 cmdCli.CommandText += "AND  P.Cedula=@Cedula";
-                cmdCli.Parameters.AddWithValue("Cedula", cedula);
+                cmdCli.Parameters.AddWithValue("@Cedula", cedula);
             }
             if (fecha != null)
             {
-                cmdCli.CommandText += "AND  P.FechaPresentacion=@Fecha";
-                cmdCli.Parameters.AddWithValue("Fecha", fecha);
+                cmdCli.CommandText += " AND  P.FechaPresentacion=@Fecha";
+                cmdCli.Parameters.AddWithValue("@Fecha", fecha);
             }
             if (estado != null || estado != "")
             {
-                cmdCli.CommandText += "AND  P.Estado=@Estado";
-                cmdCli.Parameters.AddWithValue("Estado", estado);
+                cmdCli.CommandText += " AND  P.Estado=@Estado";
+                cmdCli.Parameters.AddWithValue("@Estado", estado);
             }
             if (texto != null || texto != "")
             {
-                cmdCli.CommandText += "AND  P.Titulo LIKE %@Texto%"  ;
-                cmdCli.CommandText += "OR  P.Descripcion LIKE %@Texto%";
-                cmdCli.Parameters.AddWithValue("Texto", texto);
+                cmdCli.CommandText += " AND  P.Titulo LIKE '%@Texto%'";
+                cmdCli.CommandText += "OR  P.Descripcion LIKE '%@Texto%'";
+                cmdCli.Parameters.AddWithValue("@Texto", texto);
             }
 
 

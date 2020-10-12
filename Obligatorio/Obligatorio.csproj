@@ -177,6 +177,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Proyecto\Edit.cshtml" />
     <Content Include="Views\ArchivoProyecto\Index.cshtml" />
+    <Content Include="Views\Admin\Filtrar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

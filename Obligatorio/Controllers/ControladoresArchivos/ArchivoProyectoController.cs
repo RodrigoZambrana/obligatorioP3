@@ -13,11 +13,10 @@ namespace Obligatorio.Controllers.ControladoresArchivos
     public class ArchivoProyectoController : Controller
     {
         private static string ArchivoProyectos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Proyectos.txt");
-        private const int CANT_ATRIBUTOS_Proyecto = 3;
+        private const int CANT_ATRIBUTOS_Proyecto = 8;
 
         public ActionResult Index()
         {
-            ViewBag.LaRuta=ArchivoProyectos;
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
@@ -25,13 +24,15 @@ namespace Obligatorio.Controllers.ControladoresArchivos
                 //El constructor de StreamWriter recibe el nombre del archivo y true si se desean
                 //agregar registros, false si se va a sobrescribir el archivo.
 
-                using (StreamWriter sw = new StreamWriter("Proyectos.txt", true))
+                using (StreamWriter sw = new StreamWriter(ArchivoProyectos, false))
                 {
-                    foreach(Proyecto unProyecto in todosLosProyectos) { 
-                    sw.WriteLine(unProyecto.titulo +"|" + unProyecto.descripcion + "|"+ unProyecto.monto+"|"+unProyecto.cuotas+ "|"+ unProyecto.estado+"|"+
-                        unProyecto.fechaPresentacion.Date+ "|"+ unProyecto.puntaje+ "|" +unProyecto.tasaInteres);
+                    foreach (Proyecto unProyecto in todosLosProyectos)
+                    {
+                        sw.WriteLine(unProyecto.titulo + "|" + unProyecto.descripcion + "|" + unProyecto.monto + "|" + unProyecto.cuotas + "|" + unProyecto.estado + "|" +
+                            unProyecto.fechaPresentacion.Date + "|" + unProyecto.puntaje + "|" + unProyecto.tasaInteres);
                     }
                 }
+                ViewBag.LaRuta = ArchivoProyectos;
                 return View();
             }
             catch (FileNotFoundException) { throw; }
@@ -52,7 +53,7 @@ namespace Obligatorio.Controllers.ControladoresArchivos
                 {
                     if (linea.IndexOf("|") > 0)
                     {
-                        retorno.Add(ObtenerDesdeString(linea, ";"));
+                        retorno.Add(ObtenerDesdeString(linea, "|"));
                     }
                     linea = sr.ReadLine();
                 }
@@ -71,10 +72,10 @@ namespace Obligatorio.Controllers.ControladoresArchivos
                     descripcion = vecDatos[1],
                     monto = Decimal.Parse(vecDatos[2]),
                     cuotas=int.Parse(vecDatos[3]),
-                    estado = vecDatos[5],
-                    fechaPresentacion = DateTime.Parse(vecDatos[6]),
-                    puntaje = int.Parse(vecDatos[7]),
-                    tasaInteres = Decimal.Parse(vecDatos[8])
+                    estado = vecDatos[4],
+                    fechaPresentacion = DateTime.Parse(vecDatos[5]),
+                    puntaje = int.Parse(vecDatos[6]),
+                    tasaInteres = Decimal.Parse(vecDatos[7])
 
                 };
             }
