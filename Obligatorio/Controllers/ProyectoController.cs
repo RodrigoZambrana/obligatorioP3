@@ -10,9 +10,10 @@ namespace Obligatorio.Controllers
 {
     public class ProyectoController : Controller
     {
+        private decimal montoMaximo = 20000;
         // GET: Proyecto
         public ActionResult Index()
-        {
+        {            
             return View();
         }
 
@@ -25,8 +26,6 @@ namespace Obligatorio.Controllers
         // GET: Proyecto/Cooperativo
         public ActionResult Cooperativo()
         {
-        
-          
             return View();
         }
 
@@ -42,7 +41,22 @@ namespace Obligatorio.Controllers
                 string usu= (string) Session["usuario"];
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
                 pCooperativo.setSolicitante(u);
-                bool agregado = repoProyectos.Add(pCooperativo);
+                if (pCooperativo.cantIntegrantes < 10)
+                {
+                    decimal porcentaje = (decimal)0.02 * pCooperativo.cantIntegrantes;
+                    pCooperativo.monto = pCooperativo.monto + (pCooperativo.monto * porcentaje);
+                }
+                else
+                {
+                    decimal porcentaje = (decimal)0.2;
+                    pCooperativo.monto = pCooperativo.monto + (pCooperativo.monto * porcentaje);
+                }
+                if (pCooperativo.monto > montoMaximo * (decimal)1.20)
+                {
+                    ViewBag.Mensaje = "El monto máximo no puede superar un 20% mayor que el fijado por la empresa ";
+                    return RedirectToAction("Index", "Proyecto");
+                }
+                bool agregado = repoProyectos.Add(pCooperativo);                
                 if (agregado)
                 {
 
@@ -78,6 +92,11 @@ namespace Obligatorio.Controllers
                 string usu = (string)Session["usuario"];
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
                 pPersonal.setSolicitante(u);
+                if (pPersonal.monto - pPersonal.monto*(decimal)0.20> montoMaximo)
+                {
+                    ViewBag.Mensaje = "El monto máximo debe ser un 20% menor que el fijado por la empresa ";
+                    return RedirectToAction("Index", "Proyecto");
+                }
                 bool agregado = repoProyectos.Add(pPersonal);
                 if (agregado)
                 {
