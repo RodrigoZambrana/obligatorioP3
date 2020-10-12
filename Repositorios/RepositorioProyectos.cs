@@ -94,6 +94,49 @@ namespace Repositorios
             }
         }
 
+        public bool findPendiente()
+        {
+            Conexion unaCon = new Conexion();
+
+            SqlConnection cn = unaCon.CrearConexion();
+
+            SqlCommand cmd = new SqlCommand(@"SELECT P.*
+                 FROM Proyectos P
+                 WHERE P.Estado='pendiente';", cn);
+
+
+
+
+            try
+            {
+                if (unaCon.AbrirConexion(cn))
+                {
+                    SqlDataReader dr = cmd.ExecuteReader();
+
+                    while (dr.Read())
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+
+            catch (SqlException ex)
+            {
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            finally
+            {
+                unaCon.CerrarConexion(cn);
+            }
+        }
+
         public IEnumerable<Proyecto> FindAll()
         {
             Conexion unaCon = new Conexion();
@@ -429,6 +472,8 @@ namespace Repositorios
 
         }
 
+
+        
 
         public IEnumerable<Proyecto> Filtrar(string cedula, DateTime fecha, string estado, string texto)
         {
