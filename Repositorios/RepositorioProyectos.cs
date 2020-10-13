@@ -10,17 +10,13 @@ using Dominio;
 namespace Repositorios
 {
     public class RepositorioProyectos : IRepositorio<Proyecto>
-    {
-       
-
-        
+    {           
         public bool Add(Proyecto unProyecto)
         {
             //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
 
             if (unProyecto == null || !unProyecto.Validar())
                 return false;
-
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
             SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Cedula,@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);SELECT CAST(SCOPE_IDENTITY() AS INT)", cn);
@@ -94,7 +90,7 @@ namespace Repositorios
             }
         }
 
-        public bool findPendiente()
+        public bool findPendiente(string cedula)
         {
             Conexion unaCon = new Conexion();
 
@@ -102,11 +98,9 @@ namespace Repositorios
 
             SqlCommand cmd = new SqlCommand(@"SELECT P.*
                  FROM Proyectos P
-                 WHERE P.Estado='pendiente';", cn);
+                 WHERE P.Estado='pendiente' AND P.Cedula=@Cedula;", cn);
 
-
-
-
+              cmd.Parameters.AddWithValue("@Cedula", cedula);
             try
             {
                 if (unaCon.AbrirConexion(cn))

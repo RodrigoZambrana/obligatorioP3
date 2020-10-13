@@ -14,8 +14,8 @@ namespace Obligatorio.Controllers
         public ActionResult Index()
         {
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
-
-            if (repoProyectos.findPendiente())
+            string usu = (string)Session["usuario"];
+            if (repoProyectos.findPendiente(usu))
             {
                  ViewBag.Mensaje = "Existe un proyecto pendiente, no se puede agregar otro";
                 return View();
@@ -29,68 +29,103 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia,string imagen)
+        public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia, HttpPostedFileBase imagen)
         {
-            RepositorioProyectos repoProyectos = new RepositorioProyectos();
-           
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();          
             try
             {
                 RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
                 string usu = (string)Session["usuario"];
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
-                Proyecto p = new Proyecto();
 
                 if (tipoProyecto == "Cooperativo")
                 {
-                    p = new Cooperativo
-                    {
-                        titulo = titulo,
-                        descripcion = descripcion,
-                        monto = monto,
-                        cuotas = cantidadCuotas,
-                        cantIntegrantes = (int)cantidadIntegrantes,
-                        rutaImagen = imagen,
-                        solicitante = u,
-
-                    };
+                    Cooperativo c = new Cooperativo();
+                    if (c.SubirArchivoGuardarNombre(imagen)) {
+                        c.titulo = titulo;
+                        c.descripcion = descripcion;
+                        c.monto = monto;
+                        c.cuotas = cantidadCuotas;
+                        c.cantIntegrantes = (int)cantidadIntegrantes;
+                        c.solicitante = u;         
                 }
-
+                    if (c != null)
+                    {
+                        Session["proyecto"] = c;
+                        return View("Confirmar", c);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
                 if (tipoProyecto == "Personal")
                 {
-                    p = new Personal
+                    Personal c = new Personal();
+                    if (c.SubirArchivoGuardarNombre(imagen))
                     {
-                        titulo = titulo,
-                        descripcion = descripcion,
-                        monto = monto,
-                        cuotas = cantidadCuotas,
-                        experiencia = experiencia,
-                        rutaImagen = imagen,
-                        solicitante = u
-
-                    };
+                        c.titulo = titulo;
+                        c.descripcion = descripcion;
+                        c.monto = monto;
+                        c.cuotas = cantidadCuotas;
+                        c.experiencia = experiencia;
+                        c.solicitante = u;
+                    }
+                    if (c != null)
+                    {
+                        Session["proyecto"] = c;
+                        return View("Confirmar", c);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
 
-                if (repoProyectos.Add(p))
-                {
+                return RedirectToAction("Index");
 
-                    return View("Confirmar", p);
-                }
-                else
-                {
-                    return RedirectToAction("Cooperativo");
-                }
             }
             catch
             {
-                return RedirectToAction("Index", "Proyecto");
+                return RedirectToAction("Index");
 
             }
         }
 
-        // GET: Proyecto/Personal
-        public ActionResult Personal()
+        [HttpPost]
+        public ActionResult Confirmar(Proyecto p)
         {
-            return View();
+            
+            return RedirectToAction("Guardar");
+        }
+
+        [HttpPost]
+        public ActionResult Guardar()
+        {
+            try
+            {
+                RepositorioProyectos repoProyectos = new RepositorioProyectos();
+                Proyecto p = (Proyecto)Session["proyecto"];
+                bool agregado = repoProyectos.Add(p);
+                if (agregado)
+                {
+                    Session["proyecto"] = null;
+                    return RedirectToAction("Index", "Solicitante");
+                }
+                Session["proyecto"] = null;
+                return RedirectToAction("Index", "Solicitante");
+            }
+            catch
+            {
+                return View("Index");
+            }
+        }
+
+        public ActionResult Cancelar()
+        {
+
+            Session["proyecto"] = null;
+            return View("index");
         }
 
         // GET: Proyecto/Edit/
@@ -120,58 +155,6 @@ namespace Obligatorio.Controllers
                 return View();
             }
         }
-
-        // GET: Proyecto/Delete/5
-        //public ActionResult Confirmar()
-        //{
-        //    return View();
-        //}
-
-        // POST: Proyecto/Delete/5
-        [HttpPost]
-        public ActionResult Confirmar(Proyecto p)
-        {
-
-            try
-            {
-                RepositorioProyectos repoProyectos = new RepositorioProyectos();
-                bool agregado = repoProyectos.Add(p);
-                if (agregado)
-                {
-
-                    return View("Guardar", p);
-                }
-                return View(p);
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-        // GET: Proyecto/Delete/5
-        //public ActionResult Confirmar()
-        //{
-        //    return View();
-        //}
-
-        // POST: Proyecto/Delete/5
-        [HttpPost]
-        public ActionResult Guardar(Proyecto p)
-        {
-            try
-            {
-
-
-                return RedirectToAction("Index", "Solicitante");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
+        
     }
 }

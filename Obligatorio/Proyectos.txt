@@ -10,3 +10,7 @@ Cooperativo prueba sin noquery|prueba sin noquery|1500|4|aprobado|04/02/2002 0:0
 Personal 6|descripcion|1200|2|Pendiente|12/10/2020 0:00:00|0|0
 Personal|descripcion|1200|1|Pendiente|12/10/2020 0:00:00|0|0
 Personal|descripcion|1200|1|Pendiente|12/10/2020 0:00:00|0|0
+Personal|descripcion|1200|2|Pendiente|12/10/2020 0:00:00|0|0
+Personal|descripcion|1200|1|Pendiente|12/10/2020 0:00:00|0|0
+Personal|descripcion|1200|1|Pendiente|12/10/2020 0:00:00|0|0
+Prueba final|1231|1200|2|Pendiente|12/10/2020 0:00:00|0|0
