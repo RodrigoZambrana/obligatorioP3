@@ -138,12 +138,12 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Edit/5
         [HttpPost]
-        public ActionResult Edit(Proyecto p)
+        public ActionResult Edit(Proyecto p, string comentarios)
         {
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
-                bool actualizado= repo.Update(p);
+                bool actualizado= repo.Update(p,comentarios);
                 if (actualizado) {
                     return RedirectToAction("Index", "Admin");
                 }

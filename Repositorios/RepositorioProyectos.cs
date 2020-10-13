@@ -431,21 +431,30 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        public bool Update(Proyecto unProyecto)
+        public bool Update(Proyecto unProyecto, string comentarios)
         {
 
             //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
 
             if (unProyecto == null || !unProyecto.Validar())
                 return false;
+            string estado = "Aprobado";
+            if (unProyecto.puntaje<6) {
+                estado = "Rechazado";
+            }
 
             int id = unProyecto.id;
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;", cn);
+            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;" +
+                "INSERT INTO CambioEstado VALUES (@Id,@Cedula,@Comentarios,@Fecha);", cn);
 
-            cmd.Parameters.Add(new SqlParameter("@Estado", unProyecto.estado));
+            cmd.Parameters.Add(new SqlParameter("@Estado", estado));
             cmd.Parameters.Add(new SqlParameter("@id",id));
+            cmd.Parameters.Add(new SqlParameter("@Cedula", unProyecto.solicitante.cedula));
+            cmd.Parameters.Add(new SqlParameter("@Comentarios", comentarios));
+            cmd.Parameters.Add(new SqlParameter("@Fecha", DateTime.Now));
+
             try
             {
                 if (unaCon.AbrirConexion(cn))
