@@ -13,9 +13,23 @@ namespace Obligatorio.Controllers
         // GET: Proyecto
         public ActionResult Index()
         {
+
+
+            if (Session["usuario"] == null || (String)Session["rol"] != "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
+
             RepositorioProyectos repoProyectos = new RepositorioProyectos();
-            string usu = (string)Session["usuario"];
-            if (repoProyectos.findPendiente(usu))
+
+            if (repoProyectos.findPendiente())
             {
                  ViewBag.Mensaje = "Existe un proyecto pendiente, no se puede agregar otro";
                 return View();
@@ -24,112 +38,93 @@ namespace Obligatorio.Controllers
 
             List<int> cuotas = repoProyectos.CargarCuotas();
 
+            
+
+
             return View(cuotas);
         }
 
         // POST: Proyecto/Create
         [HttpPost]
-        public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia, HttpPostedFileBase imagen)
+        public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia,string imagen)
         {
-            RepositorioProyectos repoProyectos = new RepositorioProyectos();          
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
+           
             try
             {
                 RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
                 string usu = (string)Session["usuario"];
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
+                Proyecto p = new Proyecto();
 
                 if (tipoProyecto == "Cooperativo")
                 {
-                    Cooperativo c = new Cooperativo();
-                    if (c.SubirArchivoGuardarNombre(imagen)) {
-                        c.titulo = titulo;
-                        c.descripcion = descripcion;
-                        c.monto = monto;
-                        c.cuotas = cantidadCuotas;
-                        c.cantIntegrantes = (int)cantidadIntegrantes;
-                        c.solicitante = u;         
-                }
-                    if (c != null)
+                    p = new Cooperativo
                     {
-                        Session["proyecto"] = c;
-                        return View("Confirmar", c);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        monto = monto,
+                        cuotas = cantidadCuotas,
+                        cantIntegrantes = (int)cantidadIntegrantes,
+                        rutaImagen = imagen,
+                        solicitante = u,
+
+                    };
                 }
+
                 if (tipoProyecto == "Personal")
                 {
-                    Personal c = new Personal();
-                    if (c.SubirArchivoGuardarNombre(imagen))
+                    p = new Personal
                     {
-                        c.titulo = titulo;
-                        c.descripcion = descripcion;
-                        c.monto = monto;
-                        c.cuotas = cantidadCuotas;
-                        c.experiencia = experiencia;
-                        c.solicitante = u;
-                    }
-                    if (c != null)
-                    {
-                        Session["proyecto"] = c;
-                        return View("Confirmar", c);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
+                        titulo = titulo,
+                        descripcion = descripcion,
+                        monto = monto,
+                        cuotas = cantidadCuotas,
+                        experiencia = experiencia,
+                        rutaImagen = imagen,
+                        solicitante = u
+
+                    };
                 }
 
-                return RedirectToAction("Index");
-
-            }
-            catch
-            {
-                return RedirectToAction("Index");
-
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Confirmar(Proyecto p)
-        {
-            
-            return RedirectToAction("Guardar");
-        }
-
-        [HttpPost]
-        public ActionResult Guardar()
-        {
-            try
-            {
-                RepositorioProyectos repoProyectos = new RepositorioProyectos();
-                Proyecto p = (Proyecto)Session["proyecto"];
-                bool agregado = repoProyectos.Add(p);
-                if (agregado)
+                if (repoProyectos.Add(p))
                 {
-                    Session["proyecto"] = null;
-                    return RedirectToAction("Index", "Solicitante");
+
+                    return View("Confirmar", p);
                 }
-                Session["proyecto"] = null;
-                return RedirectToAction("Index", "Solicitante");
+                else
+                {
+                    return RedirectToAction("Cooperativo");
+                }
             }
             catch
             {
-                return View("Index");
+                return RedirectToAction("Index", "Proyecto");
+
             }
         }
 
-        public ActionResult Cancelar()
+        // GET: Proyecto/Personal
+        public ActionResult Personal()
         {
-            Session["proyecto"] = null;
-            return View("index");
+            return View();
         }
 
         // GET: Proyecto/Edit/
         public ActionResult Edit(int id)
         {
+
+            if (Session["usuario"] == null || (String)Session["rol"] != "ADMIN")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
             RepositorioProyectos repositorioProyectos = new RepositorioProyectos();
             Proyecto p = repositorioProyectos.FindById(id);
                 
@@ -138,12 +133,24 @@ namespace Obligatorio.Controllers
 
         // POST: Proyecto/Edit/5
         [HttpPost]
-        public ActionResult Edit(Proyecto p, string comentarios)
+        public ActionResult Edit(Proyecto p)
         {
+
+            if (Session["usuario"] == null || (String)Session["rol"] != "ADMIN")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
-                bool actualizado= repo.Update(p,comentarios);
+                bool actualizado= repo.Update(p);
                 if (actualizado) {
                     return RedirectToAction("Index", "Admin");
                 }
@@ -154,6 +161,79 @@ namespace Obligatorio.Controllers
                 return View();
             }
         }
-        
+
+        // GET: Proyecto/Delete/5
+        //public ActionResult Confirmar()
+        //{
+        //    return View();
+        //}
+
+        // POST: Proyecto/Delete/5
+        [HttpPost]
+        public ActionResult Confirmar(Proyecto p)
+        {
+            if (Session["usuario"] == null || (String)Session["rol"] != "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
+            try
+            {
+                RepositorioProyectos repoProyectos = new RepositorioProyectos();
+                bool agregado = repoProyectos.Add(p);
+                if (agregado)
+                {
+
+                    return View("Guardar", p);
+                }
+                return View(p);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        // GET: Proyecto/Delete/5
+        //public ActionResult Confirmar()
+        //{
+        //    return View();
+        //}
+
+        // POST: Proyecto/Delete/5
+        [HttpPost]
+        public ActionResult Guardar(Proyecto p)
+        {
+            if (Session["usuario"] == null || (String)Session["rol"] != "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            string usuario = (string)Session["usuario"];
+
+            try
+            {
+
+
+                return RedirectToAction("Index", "Solicitante");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
     }
 }

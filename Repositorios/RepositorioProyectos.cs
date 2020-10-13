@@ -10,13 +10,17 @@ using Dominio;
 namespace Repositorios
 {
     public class RepositorioProyectos : IRepositorio<Proyecto>
-    {           
+    {
+       
+
+        
         public bool Add(Proyecto unProyecto)
         {
             //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
 
             if (unProyecto == null || !unProyecto.Validar())
                 return false;
+
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
             SqlCommand cmd = new SqlCommand("INSERT INTO Proyectos VALUES (@Cedula,@Titulo,@Descripcion,@Monto,@Cuotas,@NombreImagen,@Estado,@FechaPresentacion,@Puntaje,@TasaInteres,@Tipo);SELECT CAST(SCOPE_IDENTITY() AS INT)", cn);
@@ -90,7 +94,7 @@ namespace Repositorios
             }
         }
 
-        public bool findPendiente(string cedula)
+        public bool findPendiente()
         {
             Conexion unaCon = new Conexion();
 
@@ -98,9 +102,11 @@ namespace Repositorios
 
             SqlCommand cmd = new SqlCommand(@"SELECT P.*
                  FROM Proyectos P
-                 WHERE P.Estado='pendiente' AND P.Cedula=@Cedula;", cn);
+                 WHERE P.Estado='pendiente';", cn);
 
-              cmd.Parameters.AddWithValue("@Cedula", cedula);
+
+
+
             try
             {
                 if (unaCon.AbrirConexion(cn))
@@ -431,30 +437,21 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        public bool Update(Proyecto unProyecto, string comentarios)
+        public bool Update(Proyecto unProyecto)
         {
 
             //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
 
             if (unProyecto == null || !unProyecto.Validar())
                 return false;
-            string estado = "Aprobado";
-            if (unProyecto.puntaje<6) {
-                estado = "Rechazado";
-            }
 
             int id = unProyecto.id;
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;" +
-                "INSERT INTO CambioEstado VALUES (@Id,@Cedula,@Comentarios,@Fecha);", cn);
+            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;", cn);
 
-            cmd.Parameters.Add(new SqlParameter("@Estado", estado));
+            cmd.Parameters.Add(new SqlParameter("@Estado", unProyecto.estado));
             cmd.Parameters.Add(new SqlParameter("@id",id));
-            cmd.Parameters.Add(new SqlParameter("@Cedula", unProyecto.solicitante.cedula));
-            cmd.Parameters.Add(new SqlParameter("@Comentarios", comentarios));
-            cmd.Parameters.Add(new SqlParameter("@Fecha", DateTime.Now));
-
             try
             {
                 if (unaCon.AbrirConexion(cn))
