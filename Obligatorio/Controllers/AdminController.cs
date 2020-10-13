@@ -29,6 +29,8 @@ namespace Obligatorio.Controllers
             return View (todosLosProyectos);
         }
 
+
+
         //GetFiltrar
         public ActionResult Filtrar()
         {

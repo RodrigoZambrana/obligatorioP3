@@ -16,6 +16,7 @@
     <h4>Proyecto</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <img class="card-img-top" id="~/images/fotos/@Model.rutaImagen" src="~/images/fotos/@Model.rutaImagen">
     <div class="form-group">
         @Html.LabelFor(model => model.titulo, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -40,7 +41,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.monto, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.monto, new { htmlAttributes = new { @class = "form-control" , @disabled = "disabled" } })
+            @Html.EditorFor(model => model.monto, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
             @Html.ValidationMessageFor(model => model.monto, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -53,10 +54,10 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" hidden> @*saca esto para que se vea*@
         @Html.LabelFor(model => model.rutaImagen, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.rutaImagen, new { htmlAttributes = new { @class = "form-control" , @disabled = "disabled" } })
+            @Html.EditorFor(model => model.rutaImagen, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
             @Html.ValidationMessageFor(model => model.rutaImagen, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -90,7 +91,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.tasaInteres, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.tasaInteres, new { htmlAttributes = new { @class = "form-control" , @disabled = "disabled" } })
+            @Html.EditorFor(model => model.tasaInteres, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
             @Html.ValidationMessageFor(model => model.tasaInteres, "", new { @class = "text-danger" })
         </div>
     </div>

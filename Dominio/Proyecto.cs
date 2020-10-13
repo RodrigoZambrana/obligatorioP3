@@ -18,11 +18,11 @@ namespace Dominio
         [Required]
         public string rutaImagen{ get; set; }
         public HttpPostedFileBase Archivo { get; set; }
-
         public string estado { get; set; } = "Pendiente";
-
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime fechaPresentacion { get; set; } = DateTime.Now;
         [Required]
+        [Range(0, 10, ErrorMessage = "El puntaje debe estar entre 0 y 10")]
         public int puntaje { get; set; } = 0;
         [Required]
         public int id{ get; set; }

@@ -123,7 +123,6 @@ namespace Obligatorio.Controllers
 
         public ActionResult Cancelar()
         {
-
             Session["proyecto"] = null;
             return View("index");
         }
