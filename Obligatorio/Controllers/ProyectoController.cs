@@ -10,6 +10,7 @@ namespace Obligatorio.Controllers
 {
     public class ProyectoController : Controller
     {
+        private decimal montoMaximo = 20000;
         // GET: Proyecto
         public ActionResult Index()
         {
@@ -40,6 +41,22 @@ namespace Obligatorio.Controllers
 
                 if (tipoProyecto == "Cooperativo")
                 {
+                    if (cantidadIntegrantes < 10)
+                    {
+                        decimal porcentaje = (decimal)0.02 * (decimal)cantidadIntegrantes;
+                        monto = monto + (monto * porcentaje);
+                    }
+                    else
+                    {
+                        decimal porcentaje = (decimal)0.2;
+                        monto = monto + (monto * porcentaje);
+                    }
+                    if (monto > montoMaximo * (decimal)1.20)
+                    {
+                        ViewBag.Mensaje = "El monto máximo no puede superar un 20% mayor que el fijado por la empresa ";
+                        return RedirectToAction("Index", "Proyecto");
+                    }
+
                     p = new Cooperativo
                     {
                         titulo = titulo,
@@ -55,6 +72,11 @@ namespace Obligatorio.Controllers
 
                 if (tipoProyecto == "Personal")
                 {
+                    if (monto - monto * (decimal)0.20 > montoMaximo)
+                    {
+                        ViewBag.Mensaje = "El monto máximo debe ser un 20% menor que el fijado por la empresa ";
+                        return RedirectToAction("Index", "Proyecto");
+                    }
                     p = new Personal
                     {
                         titulo = titulo,
