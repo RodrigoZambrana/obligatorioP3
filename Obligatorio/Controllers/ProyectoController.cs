@@ -143,7 +143,9 @@ namespace Obligatorio.Controllers
             try
             {
                 RepositorioProyectos repo = new RepositorioProyectos();
-                bool actualizado= repo.Update(p,comentarios);
+                Proyecto proy = repo.FindById(p.id);
+                p.solicitante = proy.solicitante;
+                bool actualizado= repo.Update(p, comentarios, (string)Session["usuario"]);
                 if (actualizado) {
                     return RedirectToAction("Index", "Admin");
                 }

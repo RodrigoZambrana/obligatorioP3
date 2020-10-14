@@ -302,9 +302,10 @@ namespace Repositorios
                     {
                         if (dr["Tipo"].ToString() == "PERSONAL")                          
                         {
+                            RepositorioUsuarios repoUser = new RepositorioUsuarios();
                             Personal p = new Personal();
                             p.id = (int)dr["Id"];
-                                //cedula
+                            p.solicitante = (Solicitante)repoUser.FindById(dr["Cedula"]); 
                             p.titulo = (string)dr["Titulo"];
                             p.descripcion = (string)dr["Descripcion"];
                             p.monto = (decimal)dr["Monto"];
@@ -322,9 +323,10 @@ namespace Repositorios
                         }
                         else if (dr["Tipo"].ToString() == "COOPERATIVO")
                         {
+                            RepositorioUsuarios repoUser = new RepositorioUsuarios();
                             Cooperativo c = new Cooperativo();
                             c.id = (int)dr["Id"];
-                                //cedula
+                            c.solicitante = (Solicitante)repoUser.FindById(dr["Cedula"]);
                             c.titulo = (string)dr["Titulo"];
                             c.descripcion = (string)dr["Descripcion"];
                             c.monto = (decimal)dr["Monto"];
@@ -431,7 +433,7 @@ namespace Repositorios
             throw new NotImplementedException();
         }
 
-        public bool Update(Proyecto unProyecto, string comentarios)
+        public bool Update(Proyecto unProyecto, string comentarios, string ciAdmin)
         {
 
             //Tendría todo el código de ADO.NET para hacer el INSERT  a través de comandos.
@@ -439,19 +441,20 @@ namespace Repositorios
             if (unProyecto == null || !unProyecto.Validar())
                 return false;
             string estado = "Aprobado";
-            if (unProyecto.puntaje<6) {
+            if (unProyecto.puntaje < 6) {
                 estado = "Rechazado";
             }
 
             int id = unProyecto.id;
             Conexion unaCon = new Conexion();
             SqlConnection cn = unaCon.CrearConexion();
-            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@estado where Id=@id ;" +
+            SqlCommand cmd = new SqlCommand("UPDATE Proyectos SET Estado=@Estado, Puntaje=@Puntaje where Id=@id ;" +
                 "INSERT INTO CambioEstado VALUES (@Id,@Cedula,@Comentarios,@Fecha);", cn);
 
             cmd.Parameters.Add(new SqlParameter("@Estado", estado));
-            cmd.Parameters.Add(new SqlParameter("@id",id));
-            cmd.Parameters.Add(new SqlParameter("@Cedula", unProyecto.solicitante.cedula));
+            cmd.Parameters.Add(new SqlParameter("@Puntaje", unProyecto.puntaje));
+            cmd.Parameters.Add(new SqlParameter("@id", id));
+            cmd.Parameters.Add(new SqlParameter("@Cedula", ciAdmin));
             cmd.Parameters.Add(new SqlParameter("@Comentarios", comentarios));
             cmd.Parameters.Add(new SqlParameter("@Fecha", DateTime.Now));
 
