@@ -131,8 +131,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
-    <Compile Include="Models\LibroModel.cs" />
     <Compile Include="Models\ProyectoModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\SolicitanteController.cs" />
@@ -188,6 +186,7 @@
     <Content Include="Views\Proyecto\Details.cshtml" />
     <Content Include="Views\Test\Create.cshtml" />
     <Content Include="Views\ProyectoModel\Create.cshtml" />
+    <Content Include="Views\ProyectoModel\Confirmar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
