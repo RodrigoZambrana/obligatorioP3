@@ -25,12 +25,8 @@ namespace Obligatorio.Controllers
             RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
             List<Cuota_Tasa> todasLasCuotasYTasas = repoConfig.CuotasyTasas();
             ViewBag.ListCuotas = todasLasCuotasYTasas;
-
-
-
             return View();
         }
-
         // POST: Proyecto/Create
         [HttpPost]
         public ActionResult Index(string titulo, string descripcion, decimal monto,int cantidadCuotas, string tipoProyecto, int? cantidadIntegrantes, string experiencia, HttpPostedFileBase imagen)
@@ -168,7 +164,10 @@ namespace Obligatorio.Controllers
 
         public ActionResult Details(int id)
         {
-            return View();
+            RepositorioProyectos repo = new RepositorioProyectos();
+            Proyecto proy = repo.FindById(id);
+            
+            return View(proy);
         }
 
     }

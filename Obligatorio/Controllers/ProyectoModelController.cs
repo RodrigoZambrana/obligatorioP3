@@ -14,6 +14,26 @@ namespace Obligatorio.Controllers
         // GET: ProyectoModel
         public ActionResult Index()
         {
+            if (Session["usuario"] == null || (string)Session["rol"] != "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
+            string usu = (string)Session["usuario"];
+            if (repoProyectos.findPendiente(usu))
+            {
+                ViewBag.Mensaje = "Existe un proyecto pendiente, no se puede agregar otro";
+                return View();
+
+            }
+
+            RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
+            List<Cuota_Tasa> todasLasCuotasYTasas = repoConfig.CuotasyTasas();
+            ViewBag.ListCuotas = todasLasCuotasYTasas;
             return View();
         }
 
@@ -25,168 +45,89 @@ namespace Obligatorio.Controllers
 
         // GET: ProyectoModel/Create
         public ActionResult Create()
-
         {
+            if (Session["usuario"] == null || (string)Session["rol"] != "SOLICITANTE")
+            {
+                Session["usuario"] = null;
+
+                Session["rol"] = null;
+
+                return RedirectToAction("Index", "Home");
+            }
+            RepositorioProyectos repoProyectos = new RepositorioProyectos();
+            string usu = (string)Session["usuario"];
+            if (repoProyectos.findPendiente(usu))
+            {
+                ViewBag.Mensaje = "Existe un proyecto pendiente, no se puede agregar otro";
+                return View(new ProyectoModel());
+
+            }
+
+            RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
+            List<Cuota_Tasa> todasLasCuotasYTasas = repoConfig.CuotasyTasas();       
             return View(new ProyectoModel());
         }
 
         // POST: ProyectoModel/Create
-
         [HttpPost]
-        public ActionResult Create(ProyectoModel p)
+        public ActionResult Create(ProyectoModel pro)
         {
             try
             {
-                Session["proyecto"] = p;
-                return RedirectToAction("Confirmar",p);
+                string usu = (string)Session["usuario"];
+                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+                Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
 
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [HttpPost]
-        public ActionResult Confirmar(ProyectoModel p)
-        {
-            //string usu = (string)Session["usuario"];
-            //RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-            //Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
-            ////Cuota_Tasa tasaycuotas = repoConfig.FindTasaYcuoutas(cantidadCuotas);
-            //ProyectoModel pro =(ProyectoModel)Session["proyecto"];
-            //if (pro.tipo == "Cooperativo")
-            //{
-            //    Cooperativo c = new Cooperativo();
-            //    if (c.SubirArchivoGuardarNombre(pro.Archivo))
-            //    {
-            //        c.titulo = pro.titulo;
-            //        c.descripcion = pro.descripcion;
-            //        c.monto = pro.monto;
-            //        c.cuotas = pro.cuotas;
-            //        c.cantIntegrantes = pro.cantidadIntegrantes;
-            //        c.solicitante = u;
-
-            //        // Session["proyecto"] = c;
-            //        return RedirectToAction("Guardar", c);
-
-            //    }
-            //}
-            //if (pro.tipo == "Personal")
-            //{
-            //    Personal c = new Personal();
-            //    if (c.SubirArchivoGuardarNombre(pro.Archivo))
-            //    {
-            //        c.titulo = pro.titulo;
-            //        c.descripcion = pro.descripcion;
-            //        c.monto = pro.monto;
-            //        c.cuotas = pro.cuotas;
-            //        c.experiencia = pro.experiencia;
-            //        c.solicitante = u;
-            //        return RedirectToAction("Guardar", c);
-            //    }
-
-            //}
-            return RedirectToAction("Guardar");
-
-        }
-
-        [HttpPost]
-        public ActionResult Guardar(ProyectoModel p)
-        {
-            string usu = (string)Session["usuario"];
-            RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
-            Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
-            //Cuota_Tasa tasaycuotas = repoConfig.FindTasaYcuoutas(cantidadCuotas);
-            ProyectoModel pro = (ProyectoModel)Session["proyecto"];
-            if (pro.tipo == "Cooperativo")
-            {
-                Cooperativo c = new Cooperativo();
-                if (c.SubirArchivoGuardarNombre(pro.Archivo))
+                if (ModelState.IsValid && pro.SubirArchivoGuardarNombre())
                 {
-                    c.titulo = pro.titulo;
-                    c.descripcion = pro.descripcion;
-                    c.monto = pro.monto;
-                    c.cuotas = pro.cuotas;
-                    c.cantIntegrantes = pro.cantidadIntegrantes;
-                    c.solicitante = u;
+                    if (pro.tipo == "Cooperativo")
+                    {
+                        Cooperativo c = new Cooperativo();
+                        if (c.SubirArchivoGuardarNombre(pro.Archivo))
+                        {
+                            c.titulo = pro.titulo;
+                            c.descripcion = pro.descripcion;
+                            c.monto = pro.monto;
+                            c.cuotas = pro.cuotas;
+                            c.cantIntegrantes = pro.cantidadIntegrantes;
+                            c.solicitante = u;
+                            RepositorioProyectos repo = new RepositorioProyectos();
+                            if (repo.Add(c))
+                            {
+                                return RedirectToAction("Index","Solicitante");
+                            }
+                            else
+                            {
+                                ViewBag.Mensaje = "Error al agregar un proyecto. Reintente";
+                                return View(pro);
+                            }
+                        }
+                    }
+                    if (pro.tipo == "Personal")
+                    {
+                        Personal c = new Personal();
+                        if (c.SubirArchivoGuardarNombre(pro.Archivo))
+                        {
+                            c.titulo = pro.titulo;
+                            c.descripcion = pro.descripcion;
+                            c.monto = pro.monto;
+                            c.cuotas = pro.cuotas;
+                            c.experiencia = pro.experiencia;
+                            c.solicitante = u;
+                            RepositorioProyectos repo = new RepositorioProyectos();
+                            repo.Add(c);
+                            return RedirectToAction("Index", "Solicitante");
+                        }
 
-                    RepositorioProyectos repo = new RepositorioProyectos();
-
-                    repo.Add(c);
-                    return RedirectToAction("Solicitante", "Index");
-
+                    }
                 }
-            }
-            if (pro.tipo == "Personal")
-            {
-                Personal c = new Personal();
-                if (c.SubirArchivoGuardarNombre(pro.Archivo))
-                {
-                    c.titulo = pro.titulo;
-                    c.descripcion = pro.descripcion;
-                    c.monto = pro.monto;
-                    c.cuotas = pro.cuotas;
-                    c.experiencia = pro.experiencia;
-                    c.solicitante = u;
-                    RepositorioProyectos repo = new RepositorioProyectos();
-
-                    repo.Add(c);
-                    return RedirectToAction("Solicitante", "Index");
-                }
-
-            }
-
-            return View("Create", new ProyectoModel());
-        }
-
-
-
-
-
-
-        // GET: ProyectoModel/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: ProyectoModel/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                ViewBag.Mensaje = "Error al agregar un proyecto. Reintente";
+                return View(pro);
             }
             catch
             {
-                return View();
+                return View(pro);
             }
-        }
-
-        // GET: ProyectoModel/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ProyectoModel/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }    
     }
 }

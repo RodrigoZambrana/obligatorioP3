@@ -9,28 +9,14 @@ namespace Repositorios
 {
     public class RepositorioConfiguraciones
     {
-        public int MaximoCuotas()
-        {
-            return 36;
-
-        }
-
-        public int MinimoCuotas()
-        {
-            return 1;
-
-        }
-
         public int MontoMaximo()
         {
             return 80000;
 
         }
-
         public int MontoMinimo()
         {
             return 1000;
-
         }
 
         public List <Cuota_Tasa> CuotasyTasas()
@@ -46,7 +32,6 @@ namespace Repositorios
             return listaCuotasyTasas;
 
         }
-
 
         public Cuota_Tasa FindTasaYcuoutas(int cantidadCuotas) {
 

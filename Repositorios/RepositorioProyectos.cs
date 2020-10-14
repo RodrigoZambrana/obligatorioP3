@@ -98,7 +98,7 @@ namespace Repositorios
 
             SqlCommand cmd = new SqlCommand(@"SELECT P.*
                  FROM Proyectos P
-                 WHERE P.Estado='pendiente' AND P.Cedula=@Cedula;", cn);
+                 WHERE P.Estado='PENDIENTE' AND P.Cedula=@Cedula;", cn);
 
               cmd.Parameters.AddWithValue("@Cedula", cedula);
             try

@@ -10,7 +10,7 @@
 <div>
     <h4>Proyecto</h4>
     <hr />
-    <img class="card-img-top" id="~/images/fotos/@Model.rutaImagen" src="~/Images/fotos/@Model.rutaImagen" ">
+    <img class="card-img-top" id="~/images/fotos/@Model.rutaImagen" src="~/Images/fotos/@Model.rutaImagen">
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.titulo)
@@ -78,6 +78,5 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index","Solicitante")
 </p>

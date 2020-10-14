@@ -187,6 +187,7 @@
     <Content Include="Views\Test\Create.cshtml" />
     <Content Include="Views\ProyectoModel\Create.cshtml" />
     <Content Include="Views\ProyectoModel\Confirmar.cshtml" />
+    <Content Include="Views\ProyectoModel\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

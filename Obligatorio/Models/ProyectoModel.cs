@@ -20,14 +20,17 @@ namespace Obligatorio.Models
         [Required]
         public string descripcion { get; set; }
         [Required]
+        [Range(0.0, Double.MaxValue, ErrorMessage = "El valor debe ser mayor a 1.")]
         public decimal monto { get; set; }
-        [Required]
         public string rutaImagen { get; set; }
         public string tipo { get; set; }
         public string experiencia { get; set; } = "";
+        [Range(0.0, Double.MaxValue, ErrorMessage = "El valor debe ser mayor a 1.")]
         public int cantidadIntegrantes { get; set; } = 0;
+        [Range(0, int.MaxValue, ErrorMessage = "El valor debe ser mayor a 1.")]
         public int cuotas { get; set; }
         public System.Web.Mvc.SelectList TodosLosTipos { get; set; }
+        [Required(ErrorMessage = "De ingresar una imagen.")]
         public HttpPostedFileBase Archivo { get; set; }
         #endregion
         #region Métodos para preparar el modelo y que tenga lo necesario para desplegar en la vista
@@ -51,8 +54,7 @@ namespace Obligatorio.Models
             this.TodosLosTipos = new SelectList(
       new List<SelectListItem>
       {
-        new SelectListItem { Disabled=true, Selected = true, Text = "Seleccione una opcion", Value = "-1"},
-        new SelectListItem { Selected = false, Text = "Cooperativo", Value = "Cooperativo"},
+        new SelectListItem { Selected = true, Text = "Cooperativo", Value = "Cooperativo"},
         new SelectListItem { Selected = false, Text = "Personal", Value = "Personal"},
     }, "Value", "Text", 1);
 
