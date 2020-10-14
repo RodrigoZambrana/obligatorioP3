@@ -18,7 +18,7 @@ namespace Dominio
         [Required]
         public string rutaImagen{ get; set; }
 
-        public string estado { get; set; } = "Pendiente";
+        public string estado { get; set; } = "PENDIENTE";
 
         public DateTime fechaPresentacion { get; set; } = DateTime.Now;
         [Required]
