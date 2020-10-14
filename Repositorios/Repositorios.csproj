@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RepositorioConfiguraciones.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="RepositorioProyectos.cs" />
     <Compile Include="RepositorioUsuarios.cs" />

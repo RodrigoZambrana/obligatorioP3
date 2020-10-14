@@ -22,9 +22,13 @@ namespace Obligatorio.Controllers
 
             }
 
-            List<int> cuotas = repoProyectos.CargarCuotas();
+            RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
+            List<Cuota_Tasa> todasLasCuotasYTasas = repoConfig.CuotasyTasas();
+            ViewBag.ListCuotas = todasLasCuotasYTasas;
 
-            return View(cuotas);
+
+
+            return View();
         }
 
         // POST: Proyecto/Create
@@ -34,9 +38,11 @@ namespace Obligatorio.Controllers
             RepositorioProyectos repoProyectos = new RepositorioProyectos();          
             try
             {
-                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
                 string usu = (string)Session["usuario"];
+                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
                 Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
+                RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
+                Cuota_Tasa tasaycuotas = repoConfig.FindTasaYcuoutas(cantidadCuotas);
 
                 if (tipoProyecto == "Cooperativo")
                 {
@@ -46,18 +52,14 @@ namespace Obligatorio.Controllers
                         c.descripcion = descripcion;
                         c.monto = monto;
                         c.cuotas = cantidadCuotas;
+                        c.tasaInteres= tasaycuotas.tasa;
                         c.cantIntegrantes = (int)cantidadIntegrantes;
-                        c.solicitante = u;         
-                }
-                    if (c != null)
-                    {
-                        Session["proyecto"] = c;
-                        return View("Confirmar", c);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
+                        c.solicitante = u;
+
+                           // Session["proyecto"] = c;
+                       return RedirectToAction("Confirmar", c);           
+
+                    }                  
                 }
                 if (tipoProyecto == "Personal")
                 {
@@ -67,45 +69,47 @@ namespace Obligatorio.Controllers
                         c.titulo = titulo;
                         c.descripcion = descripcion;
                         c.monto = monto;
-                        c.cuotas = cantidadCuotas;
+                        c.cuotas = tasaycuotas.cuotas;
+                        c.tasaInteres = tasaycuotas.tasa;
                         c.experiencia = experiencia;
-                        c.solicitante = u;
+                        c.solicitante = u;                        
+                        return  RedirectToAction("Confirmar", c);                     
                     }
-                    if (c != null)
-                    {
-                        Session["proyecto"] = c;
-                        return View("Confirmar", c);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
+                  
                 }
-
                 return RedirectToAction("Index");
-
             }
             catch
             {
                 return RedirectToAction("Index");
-
             }
         }
 
         [HttpPost]
         public ActionResult Confirmar(Proyecto p)
         {
-            
-            return RedirectToAction("Guardar");
+           //Proyecto p=(Proyecto) Session["proyecto"] ;
+            if (p.GetType().Name.ToUpper()=="COOPERATIVO") {
+                Cooperativo s=(Cooperativo)p;
+                return RedirectToAction("Guardar", s);
+            }
+
+                Personal pe = (Personal)p;          
+                return RedirectToAction("Guardar",pe);
         }
 
         [HttpPost]
-        public ActionResult Guardar()
+        public ActionResult Guardar(Proyecto p)
         {
             try
             {
                 RepositorioProyectos repoProyectos = new RepositorioProyectos();
-                Proyecto p = (Proyecto)Session["proyecto"];
+
+                //Proyecto p = (Proyecto)Session["proyecto"];
+                string usu = (string)Session["usuario"];
+                RepositorioUsuarios repoUsuarios = new RepositorioUsuarios();
+                Solicitante u = (Solicitante)repoUsuarios.FindById(usu);
+                p.solicitante = u;
                 bool agregado = repoProyectos.Add(p);
                 if (agregado)
                 {
@@ -113,10 +117,13 @@ namespace Obligatorio.Controllers
                     return RedirectToAction("Index", "Solicitante");
                 }
                 Session["proyecto"] = null;
-                return RedirectToAction("Index", "Solicitante");
+                return RedirectToAction("Index", "Proyecto");
             }
             catch
             {
+                RepositorioConfiguraciones repoConfig = new RepositorioConfiguraciones();
+                List<Cuota_Tasa> todasLasCuotasYTasas = repoConfig.CuotasyTasas();
+                ViewBag.ListCuotas = todasLasCuotasYTasas;
                 return View("Index");
             }
         }
@@ -156,6 +163,13 @@ namespace Obligatorio.Controllers
                 return View();
             }
         }
-        
+
+        // GET: Pryecto/Details/5
+
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+
     }
 }

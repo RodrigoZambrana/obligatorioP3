@@ -7,6 +7,7 @@ namespace Dominio
 {
 	public class Proyecto
 	{
+        public int id { get; set; }
         [Required]
         public string titulo{ get; set; }
         [Required]
@@ -17,18 +18,13 @@ namespace Dominio
         public int cuotas{ get; set; }
         [Required]
         public string rutaImagen{ get; set; }
-
         public string estado { get; set; } = "PENDIENTE";
-
         public DateTime fechaPresentacion { get; set; } = DateTime.Now;
         [Required]
         public int puntaje { get; set; } = 0;
         [Required]
-        public int id{ get; set; }
-       
         public decimal tasaInteres{ get; set; }
         private cambioEstado cambioEstado;
-   
         public Solicitante solicitante { get; set; }
      
         public void setSolicitante(Solicitante u)

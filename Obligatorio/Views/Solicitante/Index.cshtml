@@ -73,9 +73,9 @@
                 @Html.DisplayFor(modelItem => item.tasaInteres)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+               
+                <a href="/Proyecto/Details?id=@item.id">Detalles</a>
+               
             </td>
         </tr>
     }

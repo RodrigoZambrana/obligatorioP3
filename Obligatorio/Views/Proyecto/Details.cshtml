@@ -1,0 +1,83 @@
+﻿@model Dominio.Proyecto
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Proyecto</h4>
+    <hr />
+    <img class="card-img-top" id="~/images/fotos/@Model.rutaImagen" src="~/Images/fotos/@Model.rutaImagen" ">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.titulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.titulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.monto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.monto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cuotas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cuotas)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fechaPresentacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fechaPresentacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.puntaje)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.puntaje)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tasaInteres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tasaInteres)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
