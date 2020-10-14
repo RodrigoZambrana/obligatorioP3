@@ -5,7 +5,7 @@ using Dominio;
 
 namespace Dominio
 {
-	public abstract class Proyecto
+	public class Proyecto
 	{
         public int id { get; set; }
         [Required]
@@ -37,41 +37,41 @@ namespace Dominio
             return true;
         }
 
-        public abstract decimal CalcularPrecio();
+        public virtual decimal CalcularPrecio() { return 0; }
 
-        //public bool SubirArchivoGuardarNombre(HttpPostedFileBase Archivo)
-        //{
-        //    if (Archivo != null)
-        //    {
-        //        if (guardarArchivo(Archivo))
-        //        {
-        //            this.rutaImagen = Archivo.FileName;
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-        ///// <summary>
-        ///// Guarda en disco el archivo subido mediante upload
-        ///// </summary>
-        ///// <param name="archivo">El archivo subido mediante un input file. 
-        ///// Debe ser un objeto HttpPostedFileBase. Cuidado no confundir con HttpPostedFile </param>
-        ///// <returns>True si todo funcionó, false en caso contrario.</returns>
-        ///// <remarks>Deberían capturarse las excepciones.</remarks>
-        //private bool guardarArchivo(HttpPostedFileBase archivo)
-        //{
-        //    if (archivo != null)
-        //    {
-        //        string ruta = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images/fotos");
-        //        if (!System.IO.Directory.Exists(ruta))
-        //            System.IO.Directory.CreateDirectory(ruta);
-        //        ruta = System.IO.Path.Combine(ruta, archivo.FileName);
-        //        archivo.SaveAs(ruta);
-        //        return true;
-        //    }
-        //    else
-        //        return false;
-        //}
+        public bool SubirArchivoGuardarNombre(HttpPostedFileBase Archivo)
+        {
+            if (Archivo != null)
+            {
+                if (guardarArchivo(Archivo))
+                {
+                    this.rutaImagen = Archivo.FileName;
+                    return true;
+                }
+            }
+            return false;
+        }
+        /// <summary>
+        /// Guarda en disco el archivo subido mediante upload
+        /// </summary>
+        /// <param name="archivo">El archivo subido mediante un input file. 
+        /// Debe ser un objeto HttpPostedFileBase. Cuidado no confundir con HttpPostedFile </param>
+        /// <returns>True si todo funcionó, false en caso contrario.</returns>
+        /// <remarks>Deberían capturarse las excepciones.</remarks>
+        private bool guardarArchivo(HttpPostedFileBase archivo)
+        {
+            if (archivo != null)
+            {
+                string ruta = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images/fotos");
+                if (!System.IO.Directory.Exists(ruta))
+                    System.IO.Directory.CreateDirectory(ruta);
+                ruta = System.IO.Path.Combine(ruta, archivo.FileName);
+                archivo.SaveAs(ruta);
+                return true;
+            }
+            else
+                return false;
+        }
 
 
     }

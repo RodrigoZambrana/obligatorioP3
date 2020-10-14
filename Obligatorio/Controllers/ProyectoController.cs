@@ -52,7 +52,7 @@ namespace Obligatorio.Controllers
                         c.cantIntegrantes = (int)cantidadIntegrantes;
                         c.solicitante = u;
 
-                           // Session["proyecto"] = c;
+                       Session["proyecto"] = c;
                        return RedirectToAction("Confirmar", c);           
 
                     }                  
@@ -82,9 +82,9 @@ namespace Obligatorio.Controllers
         }
 
         [HttpPost]
-        public ActionResult Confirmar(Proyecto p)
+        public ActionResult Confirmar(Proyecto p1)
         {
-           //Proyecto p=(Proyecto) Session["proyecto"] ;
+           Proyecto p=(Proyecto) Session["proyecto"] ;
             if (p.GetType().Name.ToUpper()=="COOPERATIVO") {
                 Cooperativo s=(Cooperativo)p;
                 return RedirectToAction("Guardar", s);

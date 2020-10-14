@@ -80,10 +80,11 @@ namespace Obligatorio.Controllers
 
                 if (ModelState.IsValid && pro.SubirArchivoGuardarNombre())
                 {
+             
                     if (pro.tipo == "Cooperativo")
                     {
                         Cooperativo c = new Cooperativo();
-                        if (c.SubirArchivoGuardarNombre(pro.Archivo))
+                        if (pro.SubirArchivoGuardarNombre())
                         {
                             c.titulo = pro.titulo;
                             c.descripcion = pro.descripcion;
@@ -106,7 +107,7 @@ namespace Obligatorio.Controllers
                     if (pro.tipo == "Personal")
                     {
                         Personal c = new Personal();
-                        if (c.SubirArchivoGuardarNombre(pro.Archivo))
+                        if (pro.SubirArchivoGuardarNombre())
                         {
                             c.titulo = pro.titulo;
                             c.descripcion = pro.descripcion;
@@ -130,4 +131,6 @@ namespace Obligatorio.Controllers
             }
         }    
     }
+
+
 }
