@@ -54,9 +54,7 @@ namespace Obligatorio.Controllers
         public ActionResult Salir()
         {
             Session["usuario"] = null;
-            Session["rol"] = null;
-            Session["edad"] = null;
-            Session["proyecto"] = null;
+            Session["role"] = null;
 
             return View("index");
 
